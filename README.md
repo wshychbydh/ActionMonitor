@@ -27,5 +27,4 @@ Step 2. Add the dependency
 		compile 'com.github.wshychbydh:ActionMonitor:xx'
 	}
 
-[![](https://jitpack.io/v/wshychbydh/Monitor.svg)](https://jitpack.io/#wshychbydh/Monitor)
-
+[![](https://jitpack.io/v/wshychbydh/ActionMonitor.svg)](https://jitpack.io/#wshychbydh/ActionMonitor)
