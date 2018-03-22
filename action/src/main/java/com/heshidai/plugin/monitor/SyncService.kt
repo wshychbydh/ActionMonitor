@@ -107,6 +107,7 @@ class SyncService : Service() {
             callback.invoke(false)
             return
         }
+        LogUtils.d("上传的数据--》$body")
         Api.service.upload(body)
                 .compose(RxUtils.applySingleScheduler())
                 .subscribe(object : ObserverWrapper<String>() {
@@ -142,25 +143,24 @@ class SyncService : Service() {
                 }
             }).takeUntil {
                 syncAble && SystemUtils.isWifiConnect(this)
+            }.subscribe {
+                Api.service.upload(it)
+                        .compose(RxUtils.applySingleScheduler())
+                        .subscribe(object : ObserverWrapper<String>() {
+
+                            override fun onError(e: Throwable?) {
+                                super.onError(e)
+                                LogUtils.d("同步失败==${Thread.currentThread().name}==>>${e?.message} , $syncAble")
+                                syncAble = false
+                            }
+
+                            override fun onComplete() {
+                                super.onComplete()
+                                LogUtils.d("同步数据成功，该数据将从数据删除==${Thread.currentThread().name}==>>$it")
+                                DataHelper.deleteBody(it)
+                            }
+                        })
             }
-                    .subscribe {
-                        Api.service.upload(it)
-                                .compose(RxUtils.applySingleScheduler())
-                                .subscribe(object : ObserverWrapper<String>() {
-
-                                    override fun onError(e: Throwable?) {
-                                        super.onError(e)
-                                        LogUtils.d("同步失败==${Thread.currentThread().name}==>>${e?.message} , $syncAble")
-                                        syncAble = false
-                                    }
-
-                                    override fun onComplete() {
-                                        super.onComplete()
-                                        LogUtils.d("同步数据成功，该数据将从数据删除==${Thread.currentThread().name}==>>$it")
-                                        DataHelper.deleteBody(it)
-                                    }
-                                })
-                    }
         }.compose(RxUtils.applySingleScheduler()).subscribe()
     }
 }

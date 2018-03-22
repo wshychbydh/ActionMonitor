@@ -1,14 +1,17 @@
 package com.heshidai.plugin.monitor.util
 
 import android.util.Log
-import com.heshidai.plugin.monitor.BuildConfig
 
 /**
  * Created by cool on 2018/3/9.
  */
 object LogUtils {
-    private val isDebug = BuildConfig.DEBUG// 是否调试模式
-    private const val TAG = "GoldCard"
+    private var isDebug = false
+    private const val TAG = "Monitor"
+
+    fun setDebugAble(isDebug: Boolean) {
+        this.isDebug = isDebug
+    }
 
     /**
      * info.
