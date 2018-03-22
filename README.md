@@ -24,7 +24,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-		compile 'com.github.wshychbydh:Monitor:xx'
+		compile 'com.github.wshychbydh:ActionMonitor:xx'
 	}
 
 [![](https://jitpack.io/v/wshychbydh/Monitor.svg)](https://jitpack.io/#wshychbydh/Monitor)
