@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ActionMonitor.iml" filepath="$PROJECT_DIR$/ActionMonitor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/actionlib/actionlib.iml" filepath="$PROJECT_DIR$/actionlib/actionlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/action/actionlib.iml" filepath="$PROJECT_DIR$/action/actionlib.iml" />
     </modules>
   </component>
 </project>
