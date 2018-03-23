@@ -35,11 +35,45 @@ Step 2. Add the dependency
 
 	LogUtils.setDebugAble(true)
 >
-###### 如果某些Fragment的页面和View界面也需要作为轨迹：
+###### 如果Fragment页面也需要作为轨迹：
 
 >如果父类是android.app.Fragment，则继承<B>MonitorFragment</B>
 
 >如果父类是android.support.v4.Fragment，则继承<B>MonitorSupportFragment</B>
+
+>在需要的时候重写该方法，用于标识当前fragment是否需要作为轨迹
+
+	  @Override
+      public boolean isNeedMonitor() {
+            return super.isNeedMonitor();
+      }
+
+
+###### 如果某些View界面也需要作为轨迹：
+
+>在这些View中添加类似如下的代码即可
+
+	class xxView extend View {
+        private ViewLifecycleImpl mImpl = new ViewLifecycleImpl();
+
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            mImpl.onAttached();
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            mImpl.onDetached();
+        }
+
+        @Override
+        protected void onWindowVisibilityChanged(int visibility) {
+            super.onWindowVisibilityChanged(visibility);
+            mImpl.onVisibilityChanged(this);
+        }
+    }
 
 
 ##### 绑定信息
