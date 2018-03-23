@@ -14,6 +14,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
 
+
 /**
  * Created by cool on 2018/3/1.
  */
@@ -164,20 +165,21 @@ object Utils {
         return names
     }
 
-    fun getActivityPath(activity: Activity): String {
-        return activity.packageName + "." + activity.localClassName
-    }
-
-    fun getFragmentPath(activity: Activity, fragmentName: String): String {
-        return getActivityPath(activity) + " / " + fragmentName
-    }
-
-    fun getViewPath(view: View): String {
-        val context = view.context
-        return if (context is Activity) {
-            getActivityPath(view.context as Activity) + " / " + view.javaClass.simpleName
-        } else {
-            ViewUtils.getViewPath(view)
+    /**
+     * 获取Application中的meta-data.
+     *
+     * @param packageManager
+     * @param packageName
+     * @return
+     */
+    fun getAppMetaDataByKey(context: Context, key: String): String? {
+        var value: String? = null
+        try {
+            val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+            value = ai.metaData.getString(key)
+        } catch (e: PackageManager.NameNotFoundException) {
+            LogUtils.d("getMetaDataBundle-->${e.message}")
         }
+        return value
     }
 }

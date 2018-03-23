@@ -8,7 +8,7 @@ import java.lang.reflect.Method
  * Created by cool on 2018/3/1.
  */
 
-class ClickActionHandler internal constructor(target: Any) : DefaultActionHandler(target) {
+internal class ClickActionHandler internal constructor(target: Any) : DefaultActionHandler(target) {
 
     override fun doAction(obj: Any, method: Method, args: Array<Any>) {
         super.doAction(obj, method, args)

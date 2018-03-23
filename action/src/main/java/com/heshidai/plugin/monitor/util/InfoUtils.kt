@@ -6,13 +6,14 @@ import android.os.Build
 import com.heshidai.plugin.monitor.db.model.AppInfo
 import com.heshidai.plugin.monitor.db.model.DeviceInfo
 import com.heshidai.plugin.monitor.db.model.NetworkInfo
+import com.heshidai.plugin.monitor.location.LocationHelper
 import java.util.*
 
 /**
  * Created by cool on 2018/3/1.
  */
 
-object InfoUtils {
+internal object InfoUtils {
     fun getAppInfo(context: Context): AppInfo {
         try {
             val pm = context.packageManager
@@ -39,7 +40,7 @@ object InfoUtils {
         deviceInfo.deviceId = SystemUtils.getDeviceId(context)
         deviceInfo.imei = SystemUtils.getIMEI(context)
         deviceInfo.locale = Locale.getDefault().toString()
-        deviceInfo.mac = SystemUtils.getMac(context)
+        deviceInfo.mac = SystemUtils.getMacAddress()
         deviceInfo.model = Build.MODEL
         deviceInfo.os = "Android"
         deviceInfo.osVersion = Build.VERSION.RELEASE
@@ -48,11 +49,14 @@ object InfoUtils {
 
     fun getNetworkInfo(context: Context): NetworkInfo {
         val networkInfo = NetworkInfo()
-        //  networkInfo.carrier = SystemUtils.getOperator(context)
+        networkInfo.carrier = SystemUtils.getOperator(context)
         networkInfo.ipAddress = SystemUtils.ipAddressString
         networkInfo.wifi = SystemUtils.isWifiConnect(context)
-        // networkInfo.setLatitude();
-        // networkInfo.setLongitude();
+        val location = LocationHelper.getLocation(context)
+        if (location != null) {
+            networkInfo.latitude = location.latitude
+            networkInfo.longitude = location.longitude
+        }
         return networkInfo
     }
 }

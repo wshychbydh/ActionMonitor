@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * Created by cool on 2018/3/1.
  */
 
-class RequestHeader {
+internal class RequestHeader {
     @SerializedName("appInfo")
     var appInfo: AppInfo? = null
     @SerializedName("deviceInfo")

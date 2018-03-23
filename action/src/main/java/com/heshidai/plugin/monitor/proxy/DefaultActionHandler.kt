@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.util.*
 
-open class DefaultActionHandler internal constructor(val target: Any) : InvocationHandler {
+internal open class DefaultActionHandler internal constructor(val target: Any) : InvocationHandler {
 
     private val methodList = ArrayList<String>()
 

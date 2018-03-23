@@ -6,13 +6,15 @@ import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.telephony.TelephonyManager
-import android.util.Log
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.LineNumberReader
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
+import java.util.*
 
 /**
  * Created by cool on 2018/3/1.
@@ -72,35 +74,65 @@ object SystemUtils {
         return null
     }
 
+    fun getMacAddress(): String {
+        val all = Collections.list(NetworkInterface.getNetworkInterfaces())
+        for (nif in all) {
+            if (!nif.name.equals("wlan0", ignoreCase = true)) continue
+            val macBytes = nif.hardwareAddress ?: return ""
+            val res1 = StringBuilder()
+            for (b in macBytes) {
+                res1.append(String.format("%02X:", b))
+            }
+            if (res1.isNotEmpty()) {
+                res1.deleteCharAt(res1.length - 1)
+            }
+            return res1.toString()
+        }
+        return "02:00:00:00:00:00"
+    }
+
     /**
-     * FIXME 6.0以上可能返回02:00:00:00:00:00
-     *
-     * @param context
+     * 这是使用adb shell命令来获取mac地址的方式
      * @return
      */
-    @SuppressLint("HardwareIds", "MissingPermission")
-    internal fun getMac(context: Context): String {
-        val wifiMan = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val wifiInf = wifiMan.connectionInfo
-        return wifiInf.macAddress
+    fun getMac(): String? {
+        var macSerial: String? = null
+        var str: String? = ""
+        try {
+            val pp = Runtime.getRuntime().exec("cat/sys/class/net/wlan0/address ")
+            val ir = InputStreamReader(pp.inputStream)
+            val input = LineNumberReader(ir)
+
+            while (null != str) {
+                str = input.readLine()
+                if (str != null) {
+                    macSerial = str.trim { it <= ' ' }// 去空格
+                    break
+                }
+            }
+        } catch (ex: IOException) {
+            // 赋予默认值
+            ex.printStackTrace()
+        }
+        return macSerial
     }
 
     @SuppressLint("MissingPermission", "HardwareIds")
     internal fun getOperator(context: Context): String {
-        var providerName = ""
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
         try {
             val IMSI = telephonyManager?.subscriberId
-            Log.i("qweqwes", "运营商代码" + IMSI!!)
+            LogUtils.d("运营商代码" + IMSI!!)
             if (!IMSI.isNullOrEmpty()) {
-                if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
-                    providerName = "中国移动"
+                return if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
+                    "中国移动"
                 } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
-                    providerName = "中国联通"
+                    "中国联通"
                 } else if (IMSI.startsWith("46003")) {
-                    providerName = "中国电信"
+                    "中国电信"
+                } else {
+                    "未知运营商($IMSI)"
                 }
-                return providerName
             }
         } catch (e: Exception) {
             e.printStackTrace()

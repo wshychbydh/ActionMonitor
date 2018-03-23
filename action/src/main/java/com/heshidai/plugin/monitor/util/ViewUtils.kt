@@ -1,5 +1,6 @@
 package com.heshidai.plugin.monitor.util
 
+import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,6 +12,23 @@ import java.util.*
  * Created by cool on 2018/3/8.
  */
 object ViewUtils {
+
+    fun getActivityPath(activity: Activity): String {
+        return activity.packageName + "." + activity.localClassName
+    }
+
+    fun getFragmentPath(activity: Activity, fragmentName: String): String {
+        return getActivityPath(activity) + " / " + fragmentName
+    }
+
+    fun getViewFullPath(view: View): String {
+        val context = view.context
+        return if (context is Activity) {
+            getActivityPath(view.context as Activity) + " / " + view.javaClass.simpleName
+        } else {
+            getViewPath(view)
+        }
+    }
 
     fun getViewPath(view: View): String {
         val path = view.javaClass.simpleName

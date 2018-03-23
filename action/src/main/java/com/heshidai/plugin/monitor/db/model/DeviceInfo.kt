@@ -1,6 +1,6 @@
 package  com.heshidai.plugin.monitor.db.model
 
-class DeviceInfo {
+internal class DeviceInfo {
     var androidId: String? = null
     var density: Float = 0.toFloat()
     var deviceId: String? = null

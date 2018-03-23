@@ -3,7 +3,7 @@ package  com.heshidai.plugin.monitor.db.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class PageAction() : Parcelable {
+internal class PageAction() : Parcelable {
     var pageStartTime: Long = 0L
     var pageEndTime: Long = 0L
     var pageId: String? = null

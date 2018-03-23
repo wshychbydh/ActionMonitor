@@ -19,7 +19,7 @@ import io.reactivex.ObservableOnSubscribe
 /**
  * Created by cool on 2018/3/19.
  */
-class SyncService : Service() {
+internal class SyncService : Service() {
 
     companion object {
         const val TYPE_PAGE = 0
@@ -132,7 +132,7 @@ class SyncService : Service() {
         Observable.create<Boolean> {
             Observable.create(ObservableOnSubscribe<RequestBody> { e ->
                 val all = DataHelper.getBody()
-                LogUtils.d("有${all?.size ?: 0}条数据需要同步==${Thread.currentThread().name}==>>")
+                LogUtils.d("有${all?.size ?: 0}条数据需要同步==>>")
                 if (all == null || all.isEmpty()) {
                     e.onComplete()
                 } else {

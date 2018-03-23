@@ -8,7 +8,7 @@ import java.util.*
  * Created by cool on 2018/3/7.
  */
 
-class Track() : Parcelable {
+internal class Track() : Parcelable {
     var startPageId: String? = null
     var currentPageId: String? = null
     var actions: ArrayList<PageAction> = ArrayList()

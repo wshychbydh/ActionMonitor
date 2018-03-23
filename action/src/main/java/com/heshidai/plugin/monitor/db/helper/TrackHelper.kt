@@ -8,12 +8,13 @@ import com.heshidai.plugin.monitor.db.model.PageAction
 import com.heshidai.plugin.monitor.db.model.Track
 import com.heshidai.plugin.monitor.util.LogUtils
 import com.heshidai.plugin.monitor.util.Utils
+import com.heshidai.plugin.monitor.util.ViewUtils
 
 /**
  * Created by cool on 2018/3/7.
  */
 
-class TrackHelper {
+internal class TrackHelper {
 
     private var track: Track? = null
     private var pageAction: PageAction? = null
@@ -25,7 +26,7 @@ class TrackHelper {
     }
 
     fun startTrack(activity: Activity) {
-        val pageId = Utils.getActivityPath(activity)
+        val pageId = ViewUtils.getActivityPath(activity)
         //重新打开了第一个界面，视为轨迹结束，重新开始一个新的轨迹
         if (track?.isFinishedTrack(pageId) == true) {
             pageAction = DataFactory.createPageAction(activity)

@@ -11,7 +11,7 @@ import okhttp3.Response
 /**
  * Created by cool on 2018/3/15.
  */
-class NetInterceptor(var context: Context) : Interceptor {
+internal class NetInterceptor(var context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
                 .addHeader("data_head", Gson().toJson(DataFactory.createHeader(context)))

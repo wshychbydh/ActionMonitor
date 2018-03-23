@@ -1,6 +1,6 @@
 package  com.heshidai.plugin.monitor.db.model
 
-class Parameter {
+internal class Parameter {
     var name: String? = null
     var value: String? = null
     var referPageId: String? = null

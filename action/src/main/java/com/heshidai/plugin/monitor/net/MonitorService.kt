@@ -9,7 +9,7 @@ import retrofit2.http.POST
 /**
  * Created by cool on 2018/3/8.
  */
-interface MonitorService {
+internal interface MonitorService {
     @POST("api/collect/info")
     fun upload(@Body request: RequestBody): Observable<String>
 }

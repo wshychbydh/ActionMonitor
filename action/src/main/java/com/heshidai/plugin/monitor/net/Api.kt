@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by cool on 2018/3/8.
  */
-object Api {
+internal object Api {
 
     private const val BASE_URL = "http://collect.heshidai.com/"
     var service: MonitorService

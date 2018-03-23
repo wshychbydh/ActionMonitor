@@ -1,6 +1,6 @@
 package  com.heshidai.plugin.monitor.db.model
 
-class AppInfo {
+internal class AppInfo {
     var appVersion: String? = null
     var channel: String? = null
     var sdkVersionCode: Int = 0

@@ -12,24 +12,24 @@ class NetworkInfo() : Parcelable {
     @SerializedName("carrier")
     var carrier: String? = null
     @SerializedName("latitude")
-    var latitude: String? = null
+    var latitude = 0.0
     @SerializedName("longitude")
-    var longitude: String? = null
+    var longitude = 0.0
 
     constructor(parcel: Parcel) : this() {
         ipAddress = parcel.readString()
         wifi = parcel.readByte() != 0.toByte()
         carrier = parcel.readString()
-        latitude = parcel.readString()
-        longitude = parcel.readString()
+        latitude = parcel.readDouble()
+        longitude = parcel.readDouble()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(ipAddress)
         parcel.writeByte(if (wifi) 1 else 0)
         parcel.writeString(carrier)
-        parcel.writeString(latitude)
-        parcel.writeString(longitude)
+        parcel.writeDouble(latitude)
+        parcel.writeDouble(longitude)
     }
 
     override fun describeContents(): Int {

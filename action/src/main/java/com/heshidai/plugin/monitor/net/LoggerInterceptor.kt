@@ -7,7 +7,7 @@ import okhttp3.Response
 /**
  * Created by cool on 2018/3/8.
  */
-class LoggerInterceptor : Interceptor {
+internal class LoggerInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 

@@ -1,14 +1,23 @@
 package com.heshidai.plugin.monitor.db.helper
 
 import android.content.ContentValues
+import android.content.Context
 import com.google.gson.Gson
 import com.heshidai.plugin.monitor.db.model.RequestBody
-import com.heshidai.plugin.monitor.util.LogUtils
 
 /**
  * Created by cool on 2018/3/22.
  */
-object DataHelper {
+internal object DataHelper {
+
+    fun saveUserInfo(context: Context, userInfo: String) {
+        val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
+        shared.edit().putString("userInfo", userInfo).apply()
+    }
+
+    fun getUserInfo(context: Context): String {
+        return context.getSharedPreferences("INFO", Context.MODE_PRIVATE).getString("userInfo", "")
+    }
 
     fun saveBody(body: RequestBody) {
         val database = SqliteHelper.get().writableDatabase
@@ -21,7 +30,6 @@ object DataHelper {
         val database = SqliteHelper.get().readableDatabase
         val cursor = database.query(SqliteHelper.TABLE_NAME, null, null, null, null, null, null)
         try {
-            LogUtils.d("查出来---》${cursor?.count}条")
             if (cursor?.count ?: 0 > 0) {
                 val gson = Gson()
                 val bodyList = ArrayList<RequestBody>()

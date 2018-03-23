@@ -6,9 +6,10 @@ import android.util.Log
  * Created by cool on 2018/3/9.
  */
 object LogUtils {
-    private var isDebug = false
+    @Volatile private var isDebug = false
     private const val TAG = "Monitor"
 
+    @JvmStatic
     fun setDebugAble(isDebug: Boolean) {
         this.isDebug = isDebug
     }

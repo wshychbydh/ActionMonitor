@@ -8,7 +8,7 @@ import com.heshidai.plugin.monitor.MonitorSdk.context
 /**
  * Created by cool on 2018/3/22.
  */
-class SqliteHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
+internal class SqliteHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
     private val CREATE_TABLE = ("create table $TABLE_NAME ("
             + "$BODY text)")
 

@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable
  * Created by cool on 2018/3/1.
  */
 
-open class ObserverWrapper<T> : Observer<T> {
+internal open class ObserverWrapper<T> : Observer<T> {
     /**
      * Provides the Observer with the means of cancelling (disposing) the
      * connection (channel) with the Observable in both
