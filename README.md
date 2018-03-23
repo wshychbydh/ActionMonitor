@@ -43,6 +43,10 @@ Step 2. Add the dependency
 
 
 ##### 绑定信息
+>在AndroidManifest.xml中的application标签下添加(按需添加)
+
+	 <meta-data android:name="domain"
+                android:value="应用标识（默认为包名）"/>
 
 >在用户登陆等地方调用<B>MonitorSdk.saveUser(userInfo)</B>
 
