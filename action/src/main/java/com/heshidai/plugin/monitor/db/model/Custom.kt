@@ -5,4 +5,7 @@ package com.heshidai.plugin.monitor.db.model
  */
 internal class Custom {
     var phone: String? = null
+    override fun toString(): String {
+        return "Custom(phone=$phone)"
+    }
 }

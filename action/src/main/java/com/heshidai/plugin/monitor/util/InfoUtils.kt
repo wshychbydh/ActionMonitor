@@ -22,6 +22,7 @@ internal object InfoUtils {
             appInfo.appVersion = packageInfo.versionName
             appInfo.sdkVersionName = packageInfo.versionName
             appInfo.sdkVersionCode = packageInfo.versionCode
+            appInfo.channel = Utils.getAppMetaDataByKey(context, "channel")
             return appInfo
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
