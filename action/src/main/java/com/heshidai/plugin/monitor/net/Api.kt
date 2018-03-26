@@ -29,8 +29,8 @@ internal object Api {
     private fun createHttpClient(): OkHttpClient {
         return OkHttpClient().newBuilder()
                 .connectTimeout(20 * 1000, TimeUnit.SECONDS)
-                .addNetworkInterceptor(LogInterceptor())
                 .addNetworkInterceptor(NetInterceptor(MonitorSdk.context!!))
+                .addNetworkInterceptor(LogInterceptor())
                 .build()
     }
 }

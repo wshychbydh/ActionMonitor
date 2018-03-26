@@ -36,8 +36,8 @@ internal object DataFactory {
         val header = RequestHeader()
         header.appInfo = InfoUtils.getAppInfo(context)
         header.deviceInfo = InfoUtils.getDeviceInfo(context)
-        header.domain = Utils.getAppMetaDataByKey(context, "domain")
-                ?: context.packageName.replace(".", "")
+        val domain = Utils.getAppMetaDataByKey(context, "domain") ?: context.packageName
+        header.domain = domain.replace(".", "")
         return header
     }
 
