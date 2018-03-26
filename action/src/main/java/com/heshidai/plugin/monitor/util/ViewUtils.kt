@@ -4,7 +4,6 @@ import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.google.gson.Gson
 import com.heshidai.plugin.monitor.db.model.ViewInfo
 import java.util.*
 
@@ -54,7 +53,7 @@ object ViewUtils {
             }
             infoList.add(info)
         }
-        return Gson().toJson(infoList)
+        return Utils.getGson().toJson(infoList)
     }
 
     private fun getViewInfoFromViewGroup(infoList: ArrayList<ViewInfo>, group: ViewGroup, path: String): List<ViewInfo> {

@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.View
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -181,5 +183,14 @@ object Utils {
             LogUtils.d("getMetaDataBundle-->${e.message}")
         }
         return value
+    }
+
+    fun getGson(): Gson {
+        return GsonBuilder()
+                .serializeNulls() //智能null
+                .setLenient() // json宽松
+                .excludeFieldsWithoutExposeAnnotation()
+                .enableComplexMapKeySerialization() //支持Map的key为复杂对象的形式
+                .create()
     }
 }

@@ -1,8 +1,8 @@
 package  com.heshidai.plugin.monitor.net
 
 import android.content.Context
-import com.google.gson.Gson
 import com.heshidai.plugin.monitor.db.helper.DataFactory
+import com.heshidai.plugin.monitor.util.Utils
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -12,7 +12,7 @@ import okhttp3.Response
 internal class NetInterceptor(var context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
-                .addHeader("data_head", Gson().toJson(DataFactory.createHeader(context)))
+                .addHeader("data_head", Utils.getGson().toJson(DataFactory.createHeader(context)))
                 .build()
         return chain.proceed(request)
     }

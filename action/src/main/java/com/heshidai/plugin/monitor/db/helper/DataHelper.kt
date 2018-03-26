@@ -2,8 +2,8 @@ package com.heshidai.plugin.monitor.db.helper
 
 import android.content.ContentValues
 import android.content.Context
-import com.google.gson.Gson
 import com.heshidai.plugin.monitor.db.model.RequestBody
+import com.heshidai.plugin.monitor.util.Utils
 
 /**
  * Created by cool on 2018/3/22.
@@ -22,7 +22,8 @@ internal object DataHelper {
     fun saveBody(body: RequestBody) {
         val database = SqliteHelper.get().writableDatabase
         val contentValue = ContentValues()
-        contentValue.put(SqliteHelper.BODY, Gson().toJson(body))
+        contentValue.put(SqliteHelper.BODY, Utils.getGson().toJson(body))
+        contentValue.put(SqliteHelper.ID, body.hashCode())
         database.insert(SqliteHelper.TABLE_NAME, null, contentValue)
     }
 
@@ -31,10 +32,12 @@ internal object DataHelper {
         val cursor = database.query(SqliteHelper.TABLE_NAME, null, null, null, null, null, null)
         try {
             if (cursor?.count ?: 0 > 0) {
-                val gson = Gson()
+                val gson = Utils.getGson()
                 val bodyList = ArrayList<RequestBody>()
                 while (cursor.moveToNext()) {
-                    bodyList.add(gson.fromJson(cursor.getString(cursor.getColumnIndex(SqliteHelper.BODY)), RequestBody::class.java))
+                    val body = gson.fromJson(cursor.getString(cursor.getColumnIndex(SqliteHelper.BODY)), RequestBody::class.java)
+                    body.id = cursor.getInt(cursor.getColumnIndex(SqliteHelper.ID))
+                    bodyList.add(body)
                 }
                 return bodyList
             }
@@ -46,8 +49,8 @@ internal object DataHelper {
         return null
     }
 
-    fun deleteBody(body: RequestBody) {
-        val database = SqliteHelper.get().writableDatabase
-        database.delete(SqliteHelper.TABLE_NAME, "${SqliteHelper.BODY}=?", arrayOf(body.toString()))
+    fun deleteBody(body: RequestBody): Int {
+        return SqliteHelper.get().writableDatabase.delete(SqliteHelper.TABLE_NAME,
+                "${SqliteHelper.ID}=${body.id}", null)
     }
 }

@@ -1,7 +1,7 @@
 package  com.heshidai.plugin.monitor.net
 
-import com.google.gson.GsonBuilder
 import com.heshidai.plugin.monitor.MonitorSdk
+import com.heshidai.plugin.monitor.util.Utils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,9 +19,7 @@ internal object Api {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(createHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
-                        .setLenient()
-                        .create()))
+                .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
                 .build()
         service = retrofit.create(MonitorService::class.java)
     }

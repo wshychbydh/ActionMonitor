@@ -124,15 +124,15 @@ internal class SyncService : Service() {
                 Api.service.upload(it)
                         .enqueue(object : Callback<String?> {
                             override fun onFailure(call: Call<String?>?, t: Throwable?) {
-                                LogUtils.d("同步失败==${Thread.currentThread().name}==>>${t?.message} , $syncAble")
+                                LogUtils.d("同步失败==$it==>>${t?.message} , $syncAble")
                                 syncAble = false
                             }
 
                             override fun onResponse(call: Call<String?>?, response: Response<String?>?) {
                                 syncAble = response?.isSuccessful ?: false
                                 if (syncAble) {
-                                    LogUtils.d("同步数据成功，该数据将从数据删除==${Thread.currentThread().name}==>>$it")
-                                    DataHelper.deleteBody(it)
+                                    val index = DataHelper.deleteBody(it)
+                                    LogUtils.d("同步数据成功，该数据将从数据删除==$it==>>$index")
                                 }
                             }
                         })

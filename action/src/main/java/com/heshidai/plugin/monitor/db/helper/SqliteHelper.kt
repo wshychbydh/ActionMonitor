@@ -10,6 +10,7 @@ import com.heshidai.plugin.monitor.MonitorSdk.context
  */
 internal class SqliteHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
     private val CREATE_TABLE = ("create table $TABLE_NAME ("
+            + "$ID integer,"
             + "$BODY text)")
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -29,6 +30,7 @@ internal class SqliteHelper(context: Context?, name: String?, factory: SQLiteDat
         private val DATABASE_VERSION = 1
         const val TABLE_NAME = "ACTIONS"
         const val BODY = "body"
+        const val ID = "id"
 
         private var instance: SQLiteOpenHelper? = null
 

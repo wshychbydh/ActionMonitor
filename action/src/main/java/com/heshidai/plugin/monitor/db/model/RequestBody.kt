@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 internal class RequestBody {
+    @Transient
+    var id: Int = 0
     @SerializedName("custom")
     var custom: Custom? = null
     @SerializedName("networkInfo")
