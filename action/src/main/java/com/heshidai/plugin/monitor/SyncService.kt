@@ -9,12 +9,12 @@ import com.heshidai.plugin.monitor.db.model.EventAction
 import com.heshidai.plugin.monitor.db.model.PageAction
 import com.heshidai.plugin.monitor.db.model.RequestBody
 import com.heshidai.plugin.monitor.net.Api
-import com.heshidai.plugin.monitor.net.ObserverWrapper
 import com.heshidai.plugin.monitor.util.LogUtils
-import com.heshidai.plugin.monitor.util.RxUtils
 import com.heshidai.plugin.monitor.util.SystemUtils
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
+import com.heshidai.plugin.monitor.util.ThreadUtils
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Created by cool on 2018/3/19.
@@ -53,7 +53,9 @@ internal class SyncService : Service() {
             TYPE_SYNC -> {
                 if (MonitorSdk.isSdkInited) {
                     LogUtils.d("同步数据===>>")
-                    syncData()
+                    ThreadUtils.execute {
+                        syncData()
+                    }
                 }
             }
         }
@@ -61,44 +63,33 @@ internal class SyncService : Service() {
     }
 
     private fun savePageAction(actions: List<PageAction>) {
-        Observable.create(ObservableOnSubscribe<Boolean> { e ->
-            val body = DataFactory.composePageActionBody(this, actions)
-            uploadTrack(body, {
-                if (it) {
-                    LogUtils.d("上传行为轨迹数据成功，尝试同步数据===>>")
-                    e.onNext(it)
-                } else {
-                    LogUtils.d("上传行为轨迹数据失败，将数据保存至本地===>>")
-                    saveActionToDb(body)
-                }
-            })
 
-        }).compose(RxUtils.applySingleScheduler()).subscribe {
+        val body = DataFactory.composePageActionBody(this, actions)
+        uploadTrack(body, {
             if (it) {
+                LogUtils.d("上传行为轨迹数据成功，尝试同步数据===>>")
                 //尝试上传本地缓存的数据
                 syncData()
+            } else {
+                LogUtils.d("上传行为轨迹数据失败，将数据保存至本地===>>")
+                saveActionToDb(body)
             }
-        }
+        })
     }
 
     private fun saveEventAction(action: EventAction) {
-        Observable.create(ObservableOnSubscribe<Boolean> { e ->
+        ThreadUtils.execute {
             val body = DataFactory.composeEventActionBody(this, action)
             uploadTrack(body, {
                 if (it) {
                     LogUtils.d("上传用户事件数据成功，尝试同步数据===>>")
-                    e.onNext(it)
+                    //尝试上传本地缓存的数据
+                    syncData()
                 } else {
                     LogUtils.d("上传用户事件数据失败，将数据保存至本地===>>")
                     saveActionToDb(body)
                 }
             })
-
-        }).compose(RxUtils.applySingleScheduler()).subscribe {
-            if (it) {
-                //尝试上传本地缓存的数据
-                syncData()
-            }
         }
     }
 
@@ -109,16 +100,13 @@ internal class SyncService : Service() {
         }
         LogUtils.d("上传的数据--》$body")
         Api.service.upload(body)
-                .compose(RxUtils.applySingleScheduler())
-                .subscribe(object : ObserverWrapper<String>() {
-                    override fun onError(e: Throwable?) {
-                        super.onError(e)
+                .enqueue(object : Callback<String?> {
+                    override fun onFailure(call: Call<String?>?, t: Throwable?) {
                         callback.invoke(false)
                     }
 
-                    override fun onComplete() {
-                        super.onComplete()
-                        callback.invoke(true)
+                    override fun onResponse(call: Call<String?>?, response: Response<String?>?) {
+                        callback.invoke(response?.isSuccessful ?: false)
                     }
                 })
     }
@@ -129,38 +117,26 @@ internal class SyncService : Service() {
 
     private fun syncData() {
         var syncAble = false
-        Observable.create<Boolean> {
-            Observable.create(ObservableOnSubscribe<RequestBody> { e ->
-                val all = DataHelper.getBody()
-                LogUtils.d("有${all?.size ?: 0}条数据需要同步==>>")
-                if (all == null || all.isEmpty()) {
-                    e.onComplete()
-                } else {
-                    syncAble = true
-                    for (body in all) {
-                        e.onNext(body)
-                    }
-                }
-            }).takeUntil {
-                syncAble && SystemUtils.isWifiConnect(this)
-            }.subscribe {
+        val all = DataHelper.getBody()
+        LogUtils.d("有${all?.size ?: 0}条数据需要同步==>>")
+        if (all != null && all.isNotEmpty() && SystemUtils.isWifiConnect(this)) {
+            all.forEach {
                 Api.service.upload(it)
-                        .compose(RxUtils.applySingleScheduler())
-                        .subscribe(object : ObserverWrapper<String>() {
-
-                            override fun onError(e: Throwable?) {
-                                super.onError(e)
-                                LogUtils.d("同步失败==${Thread.currentThread().name}==>>${e?.message} , $syncAble")
+                        .enqueue(object : Callback<String?> {
+                            override fun onFailure(call: Call<String?>?, t: Throwable?) {
+                                LogUtils.d("同步失败==${Thread.currentThread().name}==>>${t?.message} , $syncAble")
                                 syncAble = false
                             }
 
-                            override fun onComplete() {
-                                super.onComplete()
-                                LogUtils.d("同步数据成功，该数据将从数据删除==${Thread.currentThread().name}==>>$it")
-                                DataHelper.deleteBody(it)
+                            override fun onResponse(call: Call<String?>?, response: Response<String?>?) {
+                                syncAble = response?.isSuccessful ?: false
+                                if (syncAble) {
+                                    LogUtils.d("同步数据成功，该数据将从数据删除==${Thread.currentThread().name}==>>$it")
+                                    DataHelper.deleteBody(it)
+                                }
                             }
                         })
             }
-        }.compose(RxUtils.applySingleScheduler()).subscribe()
+        }
     }
 }

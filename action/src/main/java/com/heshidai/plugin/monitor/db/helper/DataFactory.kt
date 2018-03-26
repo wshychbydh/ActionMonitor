@@ -3,10 +3,7 @@ package  com.heshidai.plugin.monitor.db.helper
 import android.app.Activity
 import android.content.Context
 import android.view.View
-import com.heshidai.plugin.monitor.db.model.EventAction
-import com.heshidai.plugin.monitor.db.model.PageAction
-import com.heshidai.plugin.monitor.db.model.RequestBody
-import com.heshidai.plugin.monitor.db.model.RequestHeader
+import com.heshidai.plugin.monitor.db.model.*
 import com.heshidai.plugin.monitor.util.InfoUtils
 import com.heshidai.plugin.monitor.util.Utils
 import com.heshidai.plugin.monitor.util.ViewUtils
@@ -21,7 +18,8 @@ internal object DataFactory {
         val body = RequestBody()
         body.eventAction = eventAction
         body.networkInfo = InfoUtils.getNetworkInfo(context)
-        body.userInfo = DataHelper.getUserInfo(context)
+        body.custom = Custom()
+        body.custom!!.phone = DataHelper.getPhone(context)
         return body
     }
 
@@ -29,7 +27,8 @@ internal object DataFactory {
         val body = RequestBody()
         body.pageActions = actions
         body.networkInfo = InfoUtils.getNetworkInfo(context)
-        body.userInfo = DataHelper.getUserInfo(context)
+        body.custom = Custom()
+        body.custom!!.phone = DataHelper.getPhone(context)
         return body
     }
 

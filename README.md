@@ -3,11 +3,9 @@
 该版本只有按用户行为轨迹采集数据，用户点击等行为暂时不采集。
 
 #### 用户行为规则
-1、A -> B -> A
-
-2、A -> B -> Home
-
-3、B -> C -> A ->...-> B或者Home
+1、A -> B -> A<br>
+2、A -> B -> Home<br>
+3、B -> C -> A ->...-> B或者Home<br>
 
 #### 添加依赖
 Add it in your root build.gradle at the end of repositories:
@@ -82,6 +80,6 @@ Step 2. Add the dependency
 	 <meta-data android:name="domain"
                 android:value="应用标识（默认为包名）"/>
 
->在用户登陆等地方调用<B>MonitorSdk.saveUser(userInfo)</B>
+>在用户登陆等地方调用<B>MonitorSdk.savePhone(phone)</B>
 
 [![](https://jitpack.io/v/wshychbydh/ActionMonitor.svg)](https://jitpack.io/#wshychbydh/ActionMonitor)

@@ -30,14 +30,14 @@ object MonitorSdk {
     }
 
     /**
-     * 登陆后调用，保存用户信息
+     * 在适当的时候调用，如登陆成功
      */
     @JvmStatic
-    fun saveUserInfo(userInfo: String) {
+    fun savePhone(phone: String) {
         if (context == null) {
             throw IllegalStateException("You should call MonitorSdk.init() first !")
         }
-        DataHelper.saveUserInfo(context!!, userInfo)
+        DataHelper.savePhone(context!!, phone)
     }
 
     /**

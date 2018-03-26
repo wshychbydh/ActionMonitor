@@ -10,13 +10,13 @@ import com.heshidai.plugin.monitor.db.model.RequestBody
  */
 internal object DataHelper {
 
-    fun saveUserInfo(context: Context, userInfo: String) {
+    fun savePhone(context: Context, userInfo: String) {
         val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
-        shared.edit().putString("userInfo", userInfo).apply()
+        shared.edit().putString("phone", userInfo).apply()
     }
 
-    fun getUserInfo(context: Context): String {
-        return context.getSharedPreferences("INFO", Context.MODE_PRIVATE).getString("userInfo", "")
+    fun getPhone(context: Context): String {
+        return context.getSharedPreferences("INFO", Context.MODE_PRIVATE).getString("phone", "")
     }
 
     fun saveBody(body: RequestBody) {

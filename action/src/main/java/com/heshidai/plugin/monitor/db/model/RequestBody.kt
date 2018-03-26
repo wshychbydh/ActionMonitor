@@ -7,18 +7,16 @@ import com.google.gson.annotations.SerializedName
  */
 
 internal class RequestBody {
-    @SerializedName("userInfo")
-    var userInfo: String? = null
+    @SerializedName("custom")
+    var custom: Custom? = null
     @SerializedName("networkInfo")
     var networkInfo: NetworkInfo? = null
     @SerializedName("event")
     var eventAction: EventAction? = null
-    @SerializedName("exceptionInfo")
-    var exception: String? = null
     @SerializedName("page")
     var pageActions: List<PageAction>? = null
 
     override fun toString(): String {
-        return "RequestBody(userInfo=$userInfo, networkInfo=$networkInfo, eventAction=$eventAction, exception=$exception, pageActions=$pageActions)"
+        return "RequestBody(custom=$custom, networkInfo=$networkInfo, eventAction=$eventAction, pageActions=$pageActions)"
     }
 }

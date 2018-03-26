@@ -1,7 +1,7 @@
 package  com.heshidai.plugin.monitor.net
 
 import com.heshidai.plugin.monitor.db.model.RequestBody
-import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -11,5 +11,5 @@ import retrofit2.http.POST
  */
 internal interface MonitorService {
     @POST("api/collect/info")
-    fun upload(@Body request: RequestBody): Observable<String>
+    fun upload(@Body request: RequestBody): Call<String>
 }
