@@ -57,7 +57,7 @@ Step 2. Add the dependency
         @Override
         protected void onAttachedToWindow() {
             super.onAttachedToWindow();
-            mImpl.onAttached();
+            mImpl.onAttached(this);
         }
 
         @Override
@@ -67,9 +67,9 @@ Step 2. Add the dependency
         }
 
         @Override
-        protected void onWindowVisibilityChanged(int visibility) {
-            super.onWindowVisibilityChanged(visibility);
-            mImpl.onVisibilityChanged(this);
+        protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+            super.onVisibilityChanged(changedView, visibility);
+            mImpl.onVisibilityChanged(visibility);
         }
     }
 
