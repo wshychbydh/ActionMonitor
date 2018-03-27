@@ -85,4 +85,19 @@ Step 2. Add the dependency
 
 >在用户登陆等地方调用<B>MonitorSdk.savePhone(phone)</B>
 
+
+##### SDK中的权限如下：（有则获取，不会主动请求）
+
+       <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+       <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+       <uses-permission android:name="android.permission.GET_TASKS" />
+       <uses-permission android:name="android.permission.INTERNET" />
+       <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+       <!-- 仅网络定位的权限 -->
+       <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+##### Demo地址：https://github.com/wshychbydh/ActionDemo
+
+
+
 [![](https://jitpack.io/v/wshychbydh/ActionMonitor.svg)](https://jitpack.io/#wshychbydh/ActionMonitor)
