@@ -79,6 +79,9 @@ Step 2. Add the dependency
 
 	 <meta-data android:name="domain"
                 android:value="应用标识（默认为包名）"/>
+                
+     <meta-data android:name="channel"
+                android:value="应用渠道"/>
 
 >在用户登陆等地方调用<B>MonitorSdk.savePhone(phone)</B>
 
