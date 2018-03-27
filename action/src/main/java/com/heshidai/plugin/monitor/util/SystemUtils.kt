@@ -8,19 +8,51 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 import android.telephony.TelephonyManager
+import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.LineNumberReader
-import java.net.Inet4Address
-import java.net.NetworkInterface
-import java.net.SocketException
+import java.net.*
 import java.util.*
+
 
 /**
  * Created by cool on 2018/3/1.
  */
 
 object SystemUtils {
+
+    /**
+     * 获取外网的IP
+     */
+    fun getNetworkInfo(): String {
+        val infoUrl = URL("http://pv.sohu.com/cityjson?ie=utf-8")
+        val connection = infoUrl.openConnection()
+        val httpConnection = connection as HttpURLConnection
+        val responseCode = httpConnection.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            val stream = httpConnection.inputStream
+            stream.use { it ->
+                val reader = BufferedReader(InputStreamReader(it, "utf-8"))
+                val sb = StringBuilder()
+                var line: String?
+                do {
+                    line = reader.readLine()
+                    if (line != null) {
+                        sb.append(line + "\n")
+                    }
+                } while (line != null)
+                val start = sb.indexOf("{")
+                val end = sb.indexOf("}")
+                return sb.substring(start, end + 1)
+            }
+        }
+        return ""
+    }
+
+    /**
+     * 获取本地IP
+     */
 
     internal val ipAddressString: String
         get() {
@@ -29,19 +61,17 @@ object SystemUtils {
                         .getNetworkInterfaces()
                 while (enNetI.hasMoreElements()) {
                     val netI = enNetI.nextElement()
-                    val enumIpAddr = netI
-                            .inetAddresses
+                    val enumIpAddr = netI.inetAddresses
                     while (enumIpAddr.hasMoreElements()) {
-                        val inetAddress = enumIpAddr.nextElement()
-                        if (inetAddress is Inet4Address && !inetAddress.isLoopbackAddress()) {
-                            return inetAddress.getHostAddress()
+                        val address = enumIpAddr.nextElement()
+                        if (address is Inet4Address && !address.isLoopbackAddress()) {
+                            return address.getHostAddress()
                         }
                     }
                 }
             } catch (e: SocketException) {
                 e.printStackTrace()
             }
-
             return ""
         }
 
@@ -131,14 +161,13 @@ object SystemUtils {
                 } else if (IMSI.startsWith("46003")) {
                     "中国电信"
                 } else {
-                    "未知运营商($IMSI)"
+                    ""
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        return "未获取到sim卡信息"
+        return ""
     }
 
     @SuppressLint("MissingPermission")

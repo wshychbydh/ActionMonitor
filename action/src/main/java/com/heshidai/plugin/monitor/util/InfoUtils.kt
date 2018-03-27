@@ -7,6 +7,7 @@ import com.heshidai.plugin.monitor.db.model.AppInfo
 import com.heshidai.plugin.monitor.db.model.DeviceInfo
 import com.heshidai.plugin.monitor.db.model.NetworkInfo
 import com.heshidai.plugin.monitor.location.LocationHelper
+import com.heshidai.plugin.monitor.location.NetworkHelper
 import java.util.*
 
 /**
@@ -33,7 +34,6 @@ internal object InfoUtils {
 
     fun getDeviceInfo(context: Context): DeviceInfo {
         val deviceInfo = DeviceInfo()
-        deviceInfo.androidId = context.packageName
         val dm = context.resources.displayMetrics
         deviceInfo.density = dm.density
         deviceInfo.resolution = dm.widthPixels.toString() + " * " + dm.heightPixels
@@ -50,9 +50,10 @@ internal object InfoUtils {
 
     fun getNetworkInfo(context: Context): NetworkInfo {
         val networkInfo = NetworkInfo()
+        val netInfo = NetworkHelper.getNetInfo()
+        networkInfo.ipAddress = if (netInfo != null) netInfo.cip else SystemUtils.ipAddressString
         networkInfo.carrier = SystemUtils.getOperator(context)
-        networkInfo.ipAddress = SystemUtils.ipAddressString
-        networkInfo.wifi = SystemUtils.isWifiConnect(context)
+        networkInfo.wifi = if (SystemUtils.isWifiConnect(context)) 1 else 0
         val location = LocationHelper.getLocation(context)
         if (location != null) {
             networkInfo.latitude = location.latitude

@@ -2,6 +2,7 @@ package  com.heshidai.plugin.monitor.lifecycle
 
 import android.view.View
 import com.heshidai.plugin.monitor.db.helper.TrackHelper
+import com.heshidai.plugin.monitor.util.ViewUtils
 
 /**
  * Created by cool on 2018/3/1.
@@ -10,24 +11,22 @@ import com.heshidai.plugin.monitor.db.helper.TrackHelper
 
 interface ViewLifecycle {
 
-    var visible: Int
+    var viewId: String
 
-    fun onAttached() {
-        visible = View.VISIBLE
+    fun onAttached(view: View) {
+        viewId = ViewUtils.encodeViewId(ViewUtils.getViewFullPath(view))
     }
 
     fun onDetached() {
-        visible = View.GONE
+        TrackHelper.get().endPageAction(viewId)
     }
 
-    fun onVisibilityChanged(view: View) {
-        if (visible != view.visibility) {
-            visible = view.visibility
-            if (visible == View.GONE) {
-                TrackHelper.get().endPageAction(view)
-            } else {
-                TrackHelper.get().startPageAction(view)
-            }
+    fun onVisibilityChanged(visibility: Int) {
+        if (viewId.isEmpty()) return
+        if (visibility == View.VISIBLE) {
+            TrackHelper.get().startPageAction(viewId)
+        } else {
+            TrackHelper.get().endPageAction(viewId)
         }
     }
 }

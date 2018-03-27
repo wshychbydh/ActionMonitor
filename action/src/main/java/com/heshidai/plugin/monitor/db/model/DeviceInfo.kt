@@ -1,7 +1,6 @@
 package  com.heshidai.plugin.monitor.db.model
 
 internal class DeviceInfo {
-    var androidId: String? = null
     var density: Float = 0.toFloat()
     var deviceId: String? = null
     var imei: String? = null
@@ -13,6 +12,6 @@ internal class DeviceInfo {
     var resolution: String? = null
     var uuid: String? = null
     override fun toString(): String {
-        return "DeviceInfo(androidId=$androidId, density=$density, deviceId=$deviceId, imei=$imei, locale=$locale, mac=$mac, model=$model, os=$os, osVersion=$osVersion, resolution=$resolution, uuid=$uuid)"
+        return "DeviceInfo(density=$density, deviceId=$deviceId, imei=$imei, locale=$locale, mac=$mac, model=$model, os=$os, osVersion=$osVersion, resolution=$resolution, uuid=$uuid)"
     }
 }

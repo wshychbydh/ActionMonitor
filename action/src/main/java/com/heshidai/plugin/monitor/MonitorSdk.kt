@@ -6,6 +6,7 @@ import android.content.Intent
 import com.heshidai.plugin.monitor.db.helper.DataHelper
 import com.heshidai.plugin.monitor.db.helper.SqliteHelper
 import com.heshidai.plugin.monitor.location.LocationHelper
+import com.heshidai.plugin.monitor.location.NetworkHelper
 
 @SuppressLint("StaticFieldLeak")
 /**
@@ -27,6 +28,7 @@ object MonitorSdk {
         isSdkInited = true
         context.startService(Intent(context, SyncService::class.java))
         LocationHelper.startLocation(context)
+        NetworkHelper.requestNetworkInfo(context)
     }
 
     /**

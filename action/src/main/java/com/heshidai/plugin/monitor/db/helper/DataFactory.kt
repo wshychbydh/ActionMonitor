@@ -41,26 +41,24 @@ internal object DataFactory {
         return header
     }
 
-    fun createPageAction(activity: Activity): PageAction {
+    fun createPageAction(activity: Activity, prePage: String?): PageAction {
         val action = PageAction()
         action.pageId = ViewUtils.getActivityPath(activity)
-        action.referPageId = Utils.reflectGetReferrer(activity)
+        action.referPageId = prePage
         return action
     }
 
-    fun createPageAction(activity: Activity, fragmentName: String): PageAction {
+    fun createPageAction(activity: Activity, fragmentName: String, prePage: String?): PageAction {
         val action = PageAction()
         action.pageId = ViewUtils.getFragmentPath(activity, fragmentName)
-        action.referPageId = Utils.reflectGetReferrer(activity)
+        action.referPageId = prePage
         return action
     }
 
-    fun createPageAction(view: View): PageAction {
+    fun createPageViewAction(viewId: String, prePage: String?): PageAction {
         val action = PageAction()
-        action.pageId = ViewUtils.getViewFullPath(view)
-        if (view.context is Activity) {
-            action.referPageId = Utils.reflectGetReferrer(view.context as Activity)
-        }
+        action.pageId = viewId
+        action.referPageId = prePage
         return action
     }
 

@@ -24,9 +24,9 @@ open class MonitorFragment : Fragment() {
             // isVisibleToUser == true : FragmentShow
             //  isVisibleToUser == false : FragmentHide
             if (isVisibleToUser) {
-                TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
             } else {
-                TrackHelper.get().tryEndTrack()
+                TrackHelper.get().endFragmentLifecycle()
             }
         }
     }
@@ -37,9 +37,9 @@ open class MonitorFragment : Fragment() {
             //  hidden == true : FragmentShow
             //  hidden == false : FragmentHide
             if (hidden) {
-                TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
             } else {
-                TrackHelper.get().tryEndTrack()
+                TrackHelper.get().endFragmentLifecycle()
             }
         }
     }
@@ -47,14 +47,14 @@ open class MonitorFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (isNeedMonitor && isFragmentShown) {
-            TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
         }
     }
 
     override fun onPause() {
         super.onPause()
         if (isNeedMonitor && isFragmentShown) {
-            TrackHelper.get().tryEndTrack()
+            TrackHelper.get().endFragmentLifecycle()
         }
     }
 }

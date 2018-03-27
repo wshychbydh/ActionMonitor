@@ -20,27 +20,31 @@ object LocationHelper {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //权限检查
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             LogUtils.e("请授权应用(${context.packageName})定位功能")
             return
         }
         if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
-            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, object : LocationListener {
-                override fun onLocationChanged(location: Location?) {
-                    if (location != null) {
-                        manager.removeUpdates(this)
-                    }
-                }
+            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
+                    object : LocationListener {
+                        override fun onLocationChanged(location: Location?) {
+                            if (location != null) {
+                                LogUtils.e("定位成功-->$location")
+                                manager.removeUpdates(this)
+                            }
+                        }
 
-                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                }
+                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                        }
 
-                override fun onProviderEnabled(provider: String?) {
-                }
+                        override fun onProviderEnabled(provider: String?) {
+                        }
 
-                override fun onProviderDisabled(provider: String?) {
-                }
-            })
+                        override fun onProviderDisabled(provider: String?) {
+                        }
+                    })
         }
     }
 

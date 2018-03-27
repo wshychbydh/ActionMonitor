@@ -187,7 +187,7 @@ object Utils {
 
     fun getGson(): Gson {
         return GsonBuilder()
-                .serializeNulls() //智能null
+                // .serializeNulls() //保留字段，不去空
                 .setLenient() // json宽松
                 .enableComplexMapKeySerialization() //支持Map的key为复杂对象的形式
                 .create()

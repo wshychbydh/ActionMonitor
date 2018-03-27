@@ -8,7 +8,7 @@ class NetworkInfo() : Parcelable {
     @SerializedName("ipAddress")
     var ipAddress: String? = null
     @SerializedName("wifi")
-    var wifi: Boolean = false
+    var wifi = 0
     @SerializedName("carrier")
     var carrier: String? = null
     @SerializedName("latitude")
@@ -18,15 +18,19 @@ class NetworkInfo() : Parcelable {
 
     constructor(parcel: Parcel) : this() {
         ipAddress = parcel.readString()
-        wifi = parcel.readByte() != 0.toByte()
+        wifi = parcel.readInt()
         carrier = parcel.readString()
         latitude = parcel.readDouble()
         longitude = parcel.readDouble()
     }
 
+    override fun toString(): String {
+        return "NetworkInfo(ipAddress=$ipAddress, wifi=$wifi, carrier=$carrier, latitude=$latitude, longitude=$longitude)"
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(ipAddress)
-        parcel.writeByte(if (wifi) 1 else 0)
+        parcel.writeInt(wifi)
         parcel.writeString(carrier)
         parcel.writeDouble(latitude)
         parcel.writeDouble(longitude)
@@ -44,9 +48,5 @@ class NetworkInfo() : Parcelable {
         override fun newArray(size: Int): Array<NetworkInfo?> {
             return arrayOfNulls(size)
         }
-    }
-
-    override fun toString(): String {
-        return "NetworkInfo(ipAddress=$ipAddress, wifi=$wifi, carrier=$carrier, latitude=$latitude, longitude=$longitude)"
     }
 }

@@ -10,7 +10,7 @@ import java.util.*
 
 internal class Track() : Parcelable {
     var startPageId: String? = null
-    var currentPageId: String? = null
+    var currentPageId: String? = null //mark activity
     var actions: ArrayList<PageAction> = ArrayList()
 
     constructor(parcel: Parcel) : this() {
@@ -20,6 +20,14 @@ internal class Track() : Parcelable {
 
     fun isFinishedTrack(pageId: String): Boolean {
         return startPageId == pageId && actions.size > 1
+    }
+
+    fun getPrePage(): String? {
+        return if (actions.isEmpty()) {
+            ""
+        } else {
+            actions.last().pageId
+        }
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

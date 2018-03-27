@@ -12,18 +12,26 @@ import java.util.*
  */
 object ViewUtils {
 
+    fun encodeViewId(viewId: String): String {
+        return "${viewId}_${UUID.randomUUID()}"
+    }
+
+    fun decodeViewId(viewId: String): String {
+        return viewId.substring(0, viewId.indexOf("_"))
+    }
+
     fun getActivityPath(activity: Activity): String {
         return activity.packageName + "." + activity.localClassName
     }
 
     fun getFragmentPath(activity: Activity, fragmentName: String): String {
-        return getActivityPath(activity) + " / " + fragmentName
+        return getActivityPath(activity) + "/" + fragmentName
     }
 
     fun getViewFullPath(view: View): String {
         val context = view.context
         return if (context is Activity) {
-            getActivityPath(view.context as Activity) + " / " + view.javaClass.simpleName
+            getActivityPath(view.context as Activity) + "/" + view.javaClass.simpleName
         } else {
             getViewPath(view)
         }

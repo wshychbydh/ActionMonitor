@@ -23,9 +23,9 @@ interface FragmentLifecycle {
             // isVisibleToUser == true : FragmentShow
             //  isVisibleToUser == false : FragmentHide
             if (isVisibleToUser) {
-                TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
             } else {
-                TrackHelper.get().tryEndTrack()
+                TrackHelper.get().endFragmentLifecycle()
             }
         }
     }
@@ -35,22 +35,22 @@ interface FragmentLifecycle {
             //  hidden == true : FragmentShow
             //  hidden == false : FragmentHide
             if (hidden) {
-                TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
             } else {
-                TrackHelper.get().tryEndTrack()
+                TrackHelper.get().endFragmentLifecycle()
             }
         }
     }
 
     fun onResume(isHidden: Boolean, userVisibleHint: Boolean) {
         if (isNeedMonitor && !isHidden && userVisibleHint) {
-            TrackHelper.get().startTrack(activity, this.javaClass.simpleName)
+            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
         }
     }
 
     fun onPause(isHidden: Boolean, userVisibleHint: Boolean) {
         if (isNeedMonitor && !isHidden && userVisibleHint) {
-            TrackHelper.get().tryEndTrack()
+            TrackHelper.get().endFragmentLifecycle()
         }
     }
 }
