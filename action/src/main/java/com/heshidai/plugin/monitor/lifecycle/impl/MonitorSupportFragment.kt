@@ -5,6 +5,7 @@ import com.heshidai.plugin.monitor.db.helper.TrackHelper
 
 /**
  * Created by cool on 2018/3/7.
+ * If your fragment is extends 'support.v4.app.Fragment'
  */
 
 open class MonitorSupportFragment : Fragment() {

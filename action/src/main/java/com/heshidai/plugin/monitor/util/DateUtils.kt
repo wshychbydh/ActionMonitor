@@ -8,7 +8,6 @@ import java.util.*
  */
 
 object DateUtils {
-
     fun formatDate(date: Long): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
         return sdf.format(date)

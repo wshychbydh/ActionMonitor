@@ -5,7 +5,7 @@ import android.util.Log
 /**
  * Created by cool on 2018/3/9.
  */
-object LogUtils {
+internal object LogUtils {
     @Volatile private var isDebug = false
     private const val TAG = "Monitor"
 

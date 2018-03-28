@@ -9,7 +9,7 @@ import com.heshidai.plugin.monitor.util.ViewUtils
  * @See ViewLifecycleImpl
  */
 
-interface ViewLifecycle {
+internal interface ViewLifecycle {
 
     var viewId: String
 

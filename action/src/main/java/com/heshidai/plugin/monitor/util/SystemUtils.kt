@@ -1,17 +1,17 @@
 package com.heshidai.plugin.monitor.util
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.telephony.TelephonyManager
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.LineNumberReader
+import com.heshidai.plugin.monitor.MonitorSdk.context
+import java.io.*
 import java.net.*
 import java.util.*
 
@@ -25,7 +25,12 @@ object SystemUtils {
     /**
      * 获取外网的IP
      */
-    fun getNetworkInfo(): String {
+    fun getNetworkInfo(context: Context): String {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            LogUtils.e("请授权应用(${context.packageName})网络权限")
+            return ""
+        }
         val infoUrl = URL("http://pv.sohu.com/cityjson?ie=utf-8")
         val connection = infoUrl.openConnection()
         val httpConnection = connection as HttpURLConnection
@@ -54,7 +59,7 @@ object SystemUtils {
      * 获取本地IP
      */
 
-    internal val ipAddressString: String
+    val ipAddressString: String
         get() {
             try {
                 val enNetI = NetworkInterface
@@ -75,33 +80,25 @@ object SystemUtils {
             return ""
         }
 
-    @SuppressLint("MissingPermission")
     @TargetApi(Build.VERSION_CODES.O)
-    internal fun getIMEI(ctx: Context): String? {
-        val tm = ctx.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
-        if (tm != null) {
-            return try {
-                tm.imei
-            } catch (e: Exception) {
-                null
-            }
-
+    fun getImei(context: Context): String? {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            return ""
         }
-        return null
+        val tm = context.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
+        return tm?.imei ?: ""
     }
 
-    @SuppressLint("MissingPermission", "HardwareIds")
-    internal fun getDeviceId(ctx: Context): String? {
-        val tm = ctx.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
-        if (tm != null) {
-            return try {
-                tm.deviceId
-            } catch (e: Exception) {
-                null
-            }
-
+    fun getDeviceId(context: Context): String? {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            return ""
         }
-        return null
+        val tm = context.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
+        return tm?.deviceId ?: ""
     }
 
     fun getMacAddress(): String {
@@ -147,47 +144,70 @@ object SystemUtils {
         return macSerial
     }
 
-    @SuppressLint("MissingPermission", "HardwareIds")
-    internal fun getOperator(context: Context): String {
+    fun getOperator(context: Context): String {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            return ""
+        }
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
-        try {
-            val IMSI = telephonyManager?.subscriberId
-            LogUtils.d("运营商代码" + IMSI!!)
-            if (!IMSI.isNullOrEmpty()) {
-                return if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
-                    "中国移动"
-                } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
-                    "中国联通"
-                } else if (IMSI.startsWith("46003")) {
-                    "中国电信"
-                } else {
-                    ""
-                }
+        val IMSI = telephonyManager?.subscriberId
+        LogUtils.d("运营商代码" + IMSI!!)
+        if (!IMSI.isNullOrEmpty()) {
+            return if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
+                "中国移动"
+            } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
+                "中国联通"
+            } else if (IMSI.startsWith("46003")) {
+                "中国电信"
+            } else {
+                ""
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
         return ""
     }
 
-    @SuppressLint("MissingPermission")
-    internal fun isWifiConnect(context: Context): Boolean {
+    fun isWifiConnect(context: Context): Boolean {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            LogUtils.e("请授权应用(${context.packageName})读取网络状态的权限")
+            return false
+        }
         val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         val mWifi = connManager?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         return mWifi?.isConnected ?: false
     }
 
-    @SuppressLint("MissingPermission")
-    fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-        if (connectivityManager == null) {
-            return false
-        } else {
-            val networkInfo = connectivityManager.allNetworkInfo
-            if (networkInfo?.isNotEmpty() == true) {
-                networkInfo.forEach {
-                    if (it.state == NetworkInfo.State.CONNECTED) return true
-                }
+    /**
+     * 判断手机是否root，不弹出root请求框<br></br>
+     */
+    val isRoot: Boolean
+        get() {
+            val binPath = "/system/bin/su"
+            val xBinPath = "/system/xbin/su"
+            if (File(binPath).exists() && isExecutable(binPath))
+                return true
+            return File(xBinPath).exists() && isExecutable(xBinPath)
+        }
+
+    private fun isExecutable(filePath: String): Boolean {
+        var p: Process? = null
+        try {
+            p = Runtime.getRuntime().exec("ls -l $filePath")
+            // 获取返回内容
+            val `in` = BufferedReader(InputStreamReader(
+                    p!!.inputStream))
+            val str = `in`.readLine()
+            if (str != null && str.length >= 4) {
+                val flag = str[3]
+                if (flag == 's' || flag == 'x')
+                    return true
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (p != null) {
+                p.destroy()
             }
         }
         return false

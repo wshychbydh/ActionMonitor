@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.heshidai.plugin.monitor.util.DateUtils
 
-class EventAction() : Parcelable {
+internal class EventAction() : Parcelable {
 
     @SerializedName("action_time")
     var actionTime: Long = 0L

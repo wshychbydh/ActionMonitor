@@ -1,12 +1,15 @@
 package com.heshidai.plugin.monitor
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import com.heshidai.plugin.monitor.db.helper.DataHelper
 import com.heshidai.plugin.monitor.db.helper.SqliteHelper
+import com.heshidai.plugin.monitor.lifecycle.impl.ActivityLifecycleImpl
 import com.heshidai.plugin.monitor.location.LocationHelper
 import com.heshidai.plugin.monitor.location.NetworkHelper
+import com.heshidai.plugin.monitor.util.LogUtils
 
 @SuppressLint("StaticFieldLeak")
 /**
@@ -16,19 +19,28 @@ import com.heshidai.plugin.monitor.location.NetworkHelper
 object MonitorSdk {
 
     internal var context: Context? = null
-    internal var isSdkInited = false
 
     /**
-     * You have to call first. Suggest in application's onCreate
+     * You have to call in application's onCreate
      */
     @JvmStatic
-    fun init(context: Context) {
-        MonitorSdk.context = context.applicationContext
+    fun init(application: Application) {
+        init(application, false)
+    }
+
+    /**
+     * call in application's onCreate
+     * If you want to print log , set 'debugAble' true,
+     */
+    @JvmStatic
+    fun init(application: Application, debugAble: Boolean = false) {
+        context = application.applicationContext
+        LogUtils.setDebugAble(debugAble)
         SqliteHelper.get()
-        isSdkInited = true
-        context.startService(Intent(context, SyncService::class.java))
-        LocationHelper.startLocation(context)
-        NetworkHelper.requestNetworkInfo(context)
+        application.registerActivityLifecycleCallbacks(ActivityLifecycleImpl())
+        application.startService(Intent(context!!, SyncService::class.java))
+        LocationHelper.startLocation(context!!)
+        NetworkHelper.requestNetworkInfo(context!!)
     }
 
     /**
@@ -40,14 +52,5 @@ object MonitorSdk {
             throw IllegalStateException("You should call MonitorSdk.init() first !")
         }
         DataHelper.savePhone(context!!, phone)
-    }
-
-    /**
-     * You may never call this
-     */
-    @JvmStatic
-    fun release() {
-        context = null
-        isSdkInited = false
     }
 }

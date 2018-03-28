@@ -6,7 +6,7 @@ import com.heshidai.plugin.monitor.db.helper.TrackHelper
 /**
  * Created by cool on 2018/3/22.
  */
-interface FragmentLifecycle {
+internal interface FragmentLifecycle {
     /**
      * If the fragment is not monitored, return false.
      */

@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-class NetworkInfo() : Parcelable {
+internal class NetworkInfo() : Parcelable {
     @SerializedName("ipAddress")
     var ipAddress: String? = null
     @SerializedName("wifi")

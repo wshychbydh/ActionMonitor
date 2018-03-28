@@ -51,11 +51,9 @@ internal class SyncService : Service() {
                 }
             }
             TYPE_SYNC -> {
-                if (MonitorSdk.isSdkInited) {
-                    LogUtils.d("同步数据===>>")
-                    ThreadUtils.execute {
-                        syncData()
-                    }
+                LogUtils.d("同步数据===>>")
+                ThreadUtils.execute {
+                    syncData()
                 }
             }
         }

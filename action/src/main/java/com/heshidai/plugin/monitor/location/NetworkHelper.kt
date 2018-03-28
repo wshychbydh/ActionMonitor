@@ -10,12 +10,12 @@ import com.heshidai.plugin.monitor.util.Utils
 /**
  * Created by cool on 2018/3/27.
  */
-object NetworkHelper {
+internal object NetworkHelper {
 
     fun requestNetworkInfo(context: Context) {
         Thread({
             if (SystemUtils.isWifiConnect(context)) {
-                val netInfo = SystemUtils.getNetworkInfo()
+                val netInfo = SystemUtils.getNetworkInfo(context)
                 if (netInfo.isNotEmpty()) {
                     saveNetInfo(context, netInfo)
                 }

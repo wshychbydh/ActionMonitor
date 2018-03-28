@@ -1,6 +1,6 @@
 # ActionMonitor
 #### 用户行为数据采集（按行为轨迹采集）
-该版本只有按用户行为轨迹采集数据，用户点击等行为暂时不采集。
+该版本只有按用户行为轨迹采集数据，用户点击等行为放在另外一个依赖中。
 
 #### 用户行为规则
 1、A -> B -> A<br>
@@ -27,11 +27,10 @@ Step 2. Add the dependency
 在Application的onCreate中添加
 
 	MonitorSdk.init(this);
-	registerActivityLifecycleCallbacks(new ActivityLifecycleImpl());
 
 >如果需要打印日志，打开日志开关即可
 
-	LogUtils.setDebugAble(true)
+	MonitorSdk.init(this, true);
 >
 ###### 如果Fragment页面也需要作为轨迹：
 
@@ -83,16 +82,18 @@ Step 2. Add the dependency
      <meta-data android:name="channel"
                 android:value="应用渠道"/>
 
->在用户登陆等地方调用<B>MonitorSdk.savePhone(phone)</B>
+>在用户登陆及判断登陆(已登录用户)状态的地方分别调用
+
+     MonitorSdk.savePhone(phone)
 
 
 ##### SDK中的权限如下：（有则获取，不会主动请求）
 
        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-       <uses-permission android:name="android.permission.READ_PHONE_STATE" />
        <uses-permission android:name="android.permission.GET_TASKS" />
        <uses-permission android:name="android.permission.INTERNET" />
        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
        <!-- 仅网络定位的权限 -->
        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 

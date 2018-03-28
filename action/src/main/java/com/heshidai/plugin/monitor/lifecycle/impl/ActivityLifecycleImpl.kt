@@ -9,8 +9,7 @@ import com.heshidai.plugin.monitor.db.helper.TrackHelper
  * Created by cool on 2018/3/1.
  */
 
-class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
-
+internal class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }

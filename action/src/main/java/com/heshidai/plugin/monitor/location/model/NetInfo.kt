@@ -6,7 +6,7 @@ import android.os.Parcelable
 /**
  * Created by cool on 2018/3/27.
  */
-class NetInfo() : Parcelable {
+internal class NetInfo() : Parcelable {
     var cip: String? = null
     var cid: String? = null
     var cname: String? = null

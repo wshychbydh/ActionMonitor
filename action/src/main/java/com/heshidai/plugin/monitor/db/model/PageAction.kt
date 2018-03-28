@@ -41,6 +41,6 @@ internal class PageAction() : Parcelable {
     }
 
     override fun toString(): String {
-        return "PageAction(${pageId?.substring(pageId!!.lastIndexOf(".") + 1, pageId!!.length)}, ${duration / 1000}秒)"
+        return "PageAction(${pageId?.substring(pageId!!.lastIndexOf(".") + 1, pageId!!.length)}, ${duration / 1000f}秒)"
     }
 }

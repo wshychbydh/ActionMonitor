@@ -39,7 +39,7 @@ internal object InfoUtils {
         deviceInfo.resolution = dm.widthPixels.toString() + " * " + dm.heightPixels
         deviceInfo.uuid = UUID.randomUUID().toString()
         deviceInfo.deviceId = SystemUtils.getDeviceId(context)
-        deviceInfo.imei = SystemUtils.getIMEI(context)
+        deviceInfo.imei = SystemUtils.getImei(context)
         deviceInfo.locale = Locale.getDefault().toString()
         deviceInfo.mac = SystemUtils.getMacAddress()
         deviceInfo.model = Build.MODEL

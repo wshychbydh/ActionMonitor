@@ -10,10 +10,6 @@ import android.os.Build
 import android.view.View
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
 import java.util.*
 
 
@@ -21,19 +17,7 @@ import java.util.*
  * Created by cool on 2018/3/1.
  */
 
-object Utils {
-
-    /**
-     * 判断手机是否root，不弹出root请求框<br></br>
-     */
-    val isRoot: Boolean
-        get() {
-            val binPath = "/system/bin/su"
-            val xBinPath = "/system/xbin/su"
-            if (File(binPath).exists() && isExecutable(binPath))
-                return true
-            return File(xBinPath).exists() && isExecutable(xBinPath)
-        }
+internal object Utils {
 
     //从View中利用context获取所属Activity的名字
     fun getActivityFromView(view: View): String? {
@@ -102,29 +86,6 @@ object Utils {
             }
         }
         return ""
-    }
-
-    private fun isExecutable(filePath: String): Boolean {
-        var p: Process? = null
-        try {
-            p = Runtime.getRuntime().exec("ls -l $filePath")
-            // 获取返回内容
-            val `in` = BufferedReader(InputStreamReader(
-                    p!!.inputStream))
-            val str = `in`.readLine()
-            if (str != null && str.length >= 4) {
-                val flag = str[3]
-                if (flag == 's' || flag == 'x')
-                    return true
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            if (p != null) {
-                p.destroy()
-            }
-        }
-        return false
     }
 
     /**

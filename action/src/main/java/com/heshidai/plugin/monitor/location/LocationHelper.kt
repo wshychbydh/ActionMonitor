@@ -14,7 +14,7 @@ import com.heshidai.plugin.monitor.util.LogUtils
 /**
  * Created by cool on 2018/3/23.
  */
-object LocationHelper {
+internal object LocationHelper {
 
     fun startLocation(context: Context) {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager

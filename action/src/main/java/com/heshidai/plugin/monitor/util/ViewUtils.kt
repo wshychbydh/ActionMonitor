@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Created by cool on 2018/3/8.
  */
-object ViewUtils {
+internal object ViewUtils {
 
     fun encodeViewId(viewId: String): String {
         return "${viewId}_${UUID.randomUUID()}"
