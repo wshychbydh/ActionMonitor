@@ -74,7 +74,7 @@ internal class TrackHelper {
         if (viewAction?.contains(viewId) == true) {
             val action = viewAction!![viewId]
             action!!.pageEndTime = System.currentTimeMillis()
-            action.duration = System.currentTimeMillis() - fragmentAction!!.pageStartTime
+            action.duration = System.currentTimeMillis() - action.pageStartTime
             viewAction!!.remove(viewId)
         }
     }

@@ -11,15 +11,14 @@ internal interface FragmentLifecycle {
      * If the fragment is not monitored, return false.
      */
     var isNeedMonitor: Boolean
-    var activity: Activity
+    val activity: Activity
 
     /**
-     * isFragmentResumed:Fragment is resumed
      * isVisibleToUser: Fragment is visible to user
      */
-    fun setUserVisibleHint(isFragmentResumed: Boolean, isVisibleToUser: Boolean) {
+    fun setUserVisibleHint(isVisibleToUser: Boolean) {
         //只有resumed状态的fragment适用此情景
-        if (isNeedMonitor && isFragmentResumed) {
+        if (isNeedMonitor) {
             // isVisibleToUser == true : FragmentShow
             //  isVisibleToUser == false : FragmentHide
             if (isVisibleToUser) {
@@ -42,14 +41,20 @@ internal interface FragmentLifecycle {
         }
     }
 
-    fun onResume(isHidden: Boolean, userVisibleHint: Boolean) {
-        if (isNeedMonitor && !isHidden && userVisibleHint) {
+    fun onCreate() {
+        if (isNeedMonitor) {
             TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
         }
     }
 
-    fun onPause(isHidden: Boolean, userVisibleHint: Boolean) {
-        if (isNeedMonitor && !isHidden && userVisibleHint) {
+    fun onResume() {
+        if (isNeedMonitor) {
+            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+        }
+    }
+
+    fun onPause() {
+        if (isNeedMonitor) {
             TrackHelper.get().endFragmentLifecycle()
         }
     }

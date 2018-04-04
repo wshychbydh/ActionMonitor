@@ -12,7 +12,14 @@ import com.plugin.monitor.db.helper.TrackHelper
 
 internal class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
 
+    //用于保存轨迹的第一个Page是Activity，而不会是View或Fragment
+    private var isActivityCreated = false
+
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        if (activity.javaClass.getAnnotation(Ignore::class.java) == null) {
+            TrackHelper.get().startTrack(activity)
+            isActivityCreated = true
+        }
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -20,6 +27,10 @@ internal class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
+        if (isActivityCreated) {
+            isActivityCreated = false
+            return
+        }
         if (activity.javaClass.getAnnotation(Ignore::class.java) == null) {
             TrackHelper.get().startTrack(activity)
         }

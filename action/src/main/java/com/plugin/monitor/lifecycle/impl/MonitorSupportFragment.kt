@@ -1,6 +1,7 @@
 package com.plugin.monitor.lifecycle.impl
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.plugin.inject.Ignore
 import com.plugin.monitor.db.helper.TrackHelper
@@ -17,6 +18,11 @@ open class MonitorSupportFragment : Fragment() {
      */
     open var isNeedMonitor: Boolean = true
 
+    private var isFragmentCreate: Boolean = false
+
+    private val isFragmentShown: Boolean
+        get() = !isHidden && userVisibleHint
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (isNeedMonitor) {
@@ -24,8 +30,13 @@ open class MonitorSupportFragment : Fragment() {
         }
     }
 
-    private val isFragmentShown: Boolean
-        get() = !isHidden && userVisibleHint
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (isNeedMonitor && isFragmentShown) {
+            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+        }
+        isFragmentCreate = true
+    }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

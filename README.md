@@ -39,7 +39,7 @@ Step 2. Add the dependency
     class xxActivity extends Activity{
         ```
     }
-注意：一旦Activity被过滤，则该Activity上所有加载的页面都会被过滤(默认,可配置)
+注意：Activity被过滤，则该Activity上所有加载的页面都会被过滤(默认)
 
 ##### 如果Fragment页面也需要作为轨迹：
 
