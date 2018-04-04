@@ -13,16 +13,22 @@ internal interface ViewLifecycle {
 
     var viewId: String
 
+    var isNeedMonitor: Boolean
+
     fun onAttached(view: View) {
-        viewId = ViewUtils.encodeViewId(ViewUtils.getViewFullPath(view))
+        if (isNeedMonitor) {
+            viewId = ViewUtils.encodeViewId(ViewUtils.getViewFullPath(view))
+        }
     }
 
     fun onDetached() {
-        TrackHelper.get().endPageAction(viewId)
+        if (isNeedMonitor) {
+            TrackHelper.get().endPageAction(viewId)
+        }
     }
 
     fun onVisibilityChanged(visibility: Int) {
-        if (viewId.isEmpty()) return
+        if (viewId.isEmpty() || !isNeedMonitor) return
         if (visibility == View.VISIBLE) {
             TrackHelper.get().startPageAction(viewId)
         } else {
