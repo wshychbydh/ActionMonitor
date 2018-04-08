@@ -82,7 +82,7 @@ object SystemUtils {
     fun getImei(context: Context): String? {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态权限")
             return ""
         }
         val tm = context.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
@@ -92,7 +92,7 @@ object SystemUtils {
     fun getDeviceId(context: Context): String? {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态权限")
             return ""
         }
         val tm = context.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
@@ -145,7 +145,7 @@ object SystemUtils {
     fun getOperator(context: Context): String {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})读取手机状态的权限")
+            LogUtils.e("请授权应用(${context.packageName})读取手机状态权限")
             return ""
         }
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
@@ -168,7 +168,7 @@ object SystemUtils {
     fun isWifiConnect(context: Context): Boolean {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})读取网络状态的权限")
+            LogUtils.e("请授权应用(${context.packageName})读取网络状态权限")
             return false
         }
         val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager

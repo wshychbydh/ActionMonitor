@@ -1,6 +1,5 @@
 package com.plugin.monitor.lifecycle.impl
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.plugin.inject.Ignore
@@ -17,18 +16,14 @@ open class MonitorSupportFragment : Fragment() {
      * If the fragment is not monitored, return false.
      */
     open var isNeedMonitor: Boolean = true
+        get() {
+            return field && activity.javaClass.getAnnotation(Ignore::class.java) == null
+        }
 
     private var isFragmentCreate: Boolean = false
 
     private val isFragmentShown: Boolean
         get() = !isHidden && userVisibleHint
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (isNeedMonitor) {
-            isNeedMonitor = activity.javaClass.getAnnotation(Ignore::class.java) == null
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

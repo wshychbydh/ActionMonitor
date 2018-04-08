@@ -12,7 +12,7 @@ import com.plugin.monitor.db.helper.TrackHelper
 
 internal class ActivityLifecycleImpl : Application.ActivityLifecycleCallbacks {
 
-    //用于保存轨迹的第一个Page是Activity，而不会是View或Fragment
+    //为了保证轨迹的第一个Page是Activity，而不会是View或Fragment
     private var isActivityCreated = false
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

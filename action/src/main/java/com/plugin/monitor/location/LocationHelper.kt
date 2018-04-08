@@ -23,7 +23,7 @@ internal object LocationHelper {
                 != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})定位功能")
+            LogUtils.e("请授权应用(${context.packageName})定位权限")
             return
         }
         if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
@@ -31,7 +31,7 @@ internal object LocationHelper {
                     object : LocationListener {
                         override fun onLocationChanged(location: Location?) {
                             if (location != null) {
-                                LogUtils.e("定位成功-->$location")
+                                LogUtils.d("定位成功-->$location")
                                 manager.removeUpdates(this)
                             }
                         }
@@ -52,7 +52,7 @@ internal object LocationHelper {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            LogUtils.e("请授权应用(${context.packageName})定位功能")
+            LogUtils.e("请授权应用(${context.packageName})定位权限")
             return null
         }
         //获取最后的network定位信息
