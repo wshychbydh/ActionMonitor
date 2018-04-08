@@ -39,7 +39,7 @@ Step 2. Add the dependency
     class xxActivity extends Activity{
         ```
     }
-注意：Activity被过滤，则该Activity上所有加载的页面都会被过滤(默认)
+注意：如果Activity被过滤，则该Activity上所有加载的页面都会被过滤(强制)
 
 ##### 如果Fragment页面也需要作为轨迹：
 
@@ -51,7 +51,7 @@ Step 2. Add the dependency
 
 	  @Override
       public boolean isNeedMonitor() {
-            //如果强制返回true或false，则会强制添加（忽略Activity是否被过滤）
+            //通常情况下，可以不重写该方法
             return super.isNeedMonitor();
       }
 
@@ -65,8 +65,8 @@ Step 2. Add the dependency
         
         public xxView(Context context) {
            super(context);
-           //如果强制返回true或false，则会强制添加（忽略Acitivity是否被过滤）
-           mImpl.setNeedMonitor(true); //默认由Activity是否作为轨迹来判断
+           //默认由Activity是否作为轨迹来判断，通常情况下，可以不重写该方法
+           mImpl.setNeedMonitor(true); 
         }
         
         @Override
