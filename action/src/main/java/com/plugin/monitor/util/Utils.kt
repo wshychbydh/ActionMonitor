@@ -120,10 +120,8 @@ internal object Utils {
         val resolveInfo = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY)
         for (ri in resolveInfo) {
-            names.add(ri.activityInfo.packageName)
             //属于桌面的应用:com.android.launcher(启动器)
-            println("属于桌面的应用:" + ri.activityInfo.packageName)
-
+            names.add(ri.activityInfo.packageName)
         }
         return names
     }
@@ -141,7 +139,7 @@ internal object Utils {
             val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
             value = ai.metaData.getString(key)
         } catch (e: PackageManager.NameNotFoundException) {
-            LogUtils.d("getMetaDataBundle-->${e.message}")
+            LogUtils.e("getMetaDataBundle-->${e.message}")
         }
         return value
     }

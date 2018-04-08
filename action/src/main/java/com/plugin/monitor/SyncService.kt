@@ -97,7 +97,7 @@ internal class SyncService : Service() {
             return
         }
         LogUtils.d("上传的数据--》$body")
-        Api.service.upload(body)
+        Api.service.upload(request = body)
                 .enqueue(object : Callback<String?> {
                     override fun onFailure(call: Call<String?>?, t: Throwable?) {
                         callback.invoke(false)
@@ -119,7 +119,7 @@ internal class SyncService : Service() {
         LogUtils.d("有${all?.size ?: 0}条数据需要同步==>>")
         if (all != null && all.isNotEmpty() && SystemUtils.isWifiConnect(this)) {
             all.forEach {
-                Api.service.upload(it)
+                Api.service.upload(request = it)
                         .enqueue(object : Callback<String?> {
                             override fun onFailure(call: Call<String?>?, t: Throwable?) {
                                 LogUtils.d("同步失败==$it==>>${t?.message} , $syncAble")

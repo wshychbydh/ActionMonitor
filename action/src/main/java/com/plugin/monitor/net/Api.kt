@@ -12,12 +12,13 @@ import java.util.concurrent.TimeUnit
  */
 internal object Api {
 
-    private const val BASE_URL = "http://collect.heshidai.com/"
+    var url = "http://collect.heshidai.com/api/collect/info"
     var service: MonitorService
 
     init {
+        url = Utils.getAppMetaDataByKey(MonitorSdk.context!!, "MONITOR_URL") ?: url
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl("https://empty")
                 .client(createHttpClient())
                 .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
                 .build()
