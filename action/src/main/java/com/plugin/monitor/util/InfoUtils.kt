@@ -23,7 +23,8 @@ internal object InfoUtils {
             appInfo.appVersion = packageInfo.versionName
             appInfo.sdkVersionName = packageInfo.versionName
             appInfo.sdkVersionCode = packageInfo.versionCode
-            appInfo.channel = Utils.getAppMetaDataByKey(context, "channel")
+            val channel = Utils.getAppMetaDataByKey(context, "channel")
+            appInfo.channel = channel ?: Utils.getAppMetaDataByKey(context, "UMENG_CHANNEL")
             return appInfo
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()

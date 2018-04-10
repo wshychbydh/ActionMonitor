@@ -1,5 +1,6 @@
 package com.plugin.monitor.util
 
+import android.app.Activity
 import android.content.Intent
 import android.view.MotionEvent
 import android.view.View
@@ -16,7 +17,7 @@ import com.plugin.monitor.db.model.EventAction
 object Monitor {
 
     @JvmStatic
-    fun onViewClick(v: View) {
+    fun onClick(v: View) {
         LogUtils.d("monitor", "ViewPath--onClick->" + ViewUtils.getViewPath(v))
         LogUtils.d("monitor", "ViewInfo--onClick->" + ViewUtils.getViewInfo(v))
 
@@ -30,11 +31,11 @@ object Monitor {
     }
 
     @JvmStatic
-    fun onViewTouch(v: View, event: MotionEvent) {
+    fun onTouch(v: View, event: MotionEvent) {
         //FIXME May modify in future
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
-            LogUtils.d("monitor", "ViewPath--onViewTouch->" + ViewUtils.getViewPath(v))
-            LogUtils.d("monitor", "ViewInfo--onViewTouch->" + ViewUtils.getViewInfo(v))
+            LogUtils.d("monitor", "ViewPath--onTouch->" + ViewUtils.getViewPath(v))
+            LogUtils.d("monitor", "ViewInfo--onTouch->" + ViewUtils.getViewInfo(v))
             ThreadUtils.execute {
                 val action = DataFactory.createEventAction(v, EventAction.EVENT_TOUCH)
                 val intent = Intent(v.context, SyncService::class.java)
@@ -46,7 +47,38 @@ object Monitor {
     }
 
     @JvmStatic
-    fun onViewLongClick(v: View) {
+    fun onTouchEvent(v: View, event: MotionEvent) {
+        //FIXME May modify in future
+        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
+            LogUtils.d("monitor", "ViewPath--onTouchEvent->" + ViewUtils.getViewPath(v))
+            LogUtils.d("monitor", "ViewInfo--onTouchEvent->" + ViewUtils.getViewInfo(v))
+            ThreadUtils.execute {
+                val action = DataFactory.createEventAction(v, EventAction.EVENT_TOUCH_EVENT)
+                val intent = Intent(v.context, SyncService::class.java)
+                intent.putExtra(SyncService.TYPE, SyncService.EVENT)
+                intent.putExtra(SyncService.EVENT, action)
+                v.context.startService(intent)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun onTouchEvent(activity: Activity, event: MotionEvent) {
+        //FIXME May modify in future
+        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
+            LogUtils.d("monitor", "ViewPath--onTouchEvent->" + ViewUtils.getActivityPath(activity))
+            ThreadUtils.execute {
+                val action = DataFactory.createEventAction(activity, EventAction.EVENT_TOUCH_EVENT)
+                val intent = Intent(activity, SyncService::class.java)
+                intent.putExtra(SyncService.TYPE, SyncService.EVENT)
+                intent.putExtra(SyncService.EVENT, action)
+                activity.startService(intent)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun onLongClick(v: View) {
         LogUtils.d("monitor", "ViewPath--onLongClick->" + ViewUtils.getViewPath(v))
         LogUtils.d("monitor", "ViewInfo--onLongClick->" + ViewUtils.getViewInfo(v))
         ThreadUtils.execute {
@@ -62,7 +94,7 @@ object Monitor {
      * Used for RadioGroup
      */
     @JvmStatic
-    fun onCheckChanged(group: RadioGroup, checkedId: Int) {
+    fun onCheckedChanged(group: RadioGroup, checkedId: Int) {
         var checkedView: View? = null
         for (index in 0..group.childCount) {
             if (group.getChildAt(index).id == checkedId) {
@@ -85,7 +117,7 @@ object Monitor {
      * Used for CompoundButton
      */
     @JvmStatic
-    fun onCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
+    fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         //FIXME May modify in future
         if (!isChecked) return
         LogUtils.d("monitor", "ViewPath--onCheckChanged->" + ViewUtils.getViewPath(buttonView))

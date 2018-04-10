@@ -49,6 +49,7 @@ internal class EventAction() : Parcelable {
 
         const val EVENT_CLICK = "onClick"
         const val EVENT_TOUCH = "onTouch"
+        const val EVENT_TOUCH_EVENT = "onTouchEvent"
         const val EVENT_LONG_CLICK = "onLongClick"
         const val EVENT_RADIOGROUP = "onCheckedChanged_radiogroup"
         const val EVENT_COMPOUNDBUTTON = "onCheckedChanged_compoundbutton"

@@ -1,12 +1,10 @@
 package com.plugin.monitor.util
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
-import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.telephony.TelephonyManager
 import java.io.*
@@ -78,7 +76,6 @@ object SystemUtils {
             return ""
         }
 
-    @TargetApi(Build.VERSION_CODES.O)
     fun getImei(context: Context): String? {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -86,7 +83,9 @@ object SystemUtils {
             return ""
         }
         val tm = context.getSystemService(Activity.TELEPHONY_SERVICE) as? TelephonyManager
-        return tm?.imei ?: ""
+        // @TargetApi(Build.VERSION_CODES.O)
+        // return tm?.imei ?: ""
+        return tm?.deviceId ?: ""
     }
 
     fun getDeviceId(context: Context): String? {

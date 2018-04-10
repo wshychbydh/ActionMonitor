@@ -73,4 +73,13 @@ internal object DataFactory {
         }
         return eventAction
     }
+
+    fun createEventAction(activity: Activity, eventName: String): EventAction {
+        val eventAction = EventAction()
+        eventAction.actionTime = System.currentTimeMillis()
+        eventAction.eventName = eventName
+        eventAction.viewPath = ViewUtils.getActivityPath(activity)
+        eventAction.activityName = activity.javaClass.name
+        return eventAction
+    }
 }
