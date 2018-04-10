@@ -16,6 +16,6 @@ internal class LongClickActionHandler internal constructor(target: View.OnLongCl
 
     override fun doAction(obj: Any, method: Method, args: Array<Any>) {
         super.doAction(obj, method, args)
-        Monitor.onViewLongClick(args[0] as View)
+        Monitor.onLongClick(args[0] as View)
     }
 }
