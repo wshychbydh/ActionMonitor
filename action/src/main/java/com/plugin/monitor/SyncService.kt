@@ -35,24 +35,24 @@ internal class SyncService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.getIntExtra(TYPE, TYPE_SYNC)) {
-            TYPE_PAGE -> {
-                LogUtils.d("保存轨迹===>>")
-                val actions = intent.getParcelableArrayListExtra<PageAction>(ACTION)
-                if (actions != null && actions.isNotEmpty()) {
-                    savePageAction(actions)
+        ThreadUtils.execute {
+            when (intent?.getIntExtra(TYPE, TYPE_SYNC)) {
+                TYPE_PAGE -> {
+                    LogUtils.d("保存轨迹===>>")
+                    val actions = intent.getParcelableArrayListExtra<PageAction>(ACTION)
+                    if (actions != null && actions.isNotEmpty()) {
+                        savePageAction(actions)
+                    }
                 }
-            }
-            TYPE_EVENT -> {
-                LogUtils.d("保存事件===>>")
-                val action = intent.getParcelableExtra<EventAction>(EVENT)
-                if (action != null) {
-                    saveEventAction(action)
+                TYPE_EVENT -> {
+                    LogUtils.d("保存事件===>>")
+                    val action = intent.getParcelableExtra<EventAction>(EVENT)
+                    if (action != null) {
+                        saveEventAction(action)
+                    }
                 }
-            }
-            TYPE_SYNC -> {
-                LogUtils.d("同步数据===>>")
-                ThreadUtils.execute {
+                TYPE_SYNC -> {
+                    LogUtils.d("同步数据===>>")
                     syncData()
                 }
             }
@@ -61,7 +61,6 @@ internal class SyncService : Service() {
     }
 
     private fun savePageAction(actions: List<PageAction>) {
-
         val body = DataFactory.composePageActionBody(this, actions)
         uploadTrack(body, {
             if (it) {
@@ -76,19 +75,17 @@ internal class SyncService : Service() {
     }
 
     private fun saveEventAction(action: EventAction) {
-        ThreadUtils.execute {
-            val body = DataFactory.composeEventActionBody(this, action)
-            uploadTrack(body, {
-                if (it) {
-                    LogUtils.d("上传用户事件数据成功，尝试同步数据===>>")
-                    //尝试上传本地缓存的数据
-                    syncData()
-                } else {
-                    LogUtils.d("上传用户事件数据失败，将数据保存至本地===>>")
-                    saveActionToDb(body)
-                }
-            })
-        }
+        val body = DataFactory.composeEventActionBody(this, action)
+        uploadTrack(body, {
+            if (it) {
+                LogUtils.d("上传用户事件数据成功，尝试同步数据===>>")
+                //尝试上传本地缓存的数据
+                syncData()
+            } else {
+                LogUtils.d("上传用户事件数据失败，将数据保存至本地===>>")
+                saveActionToDb(body)
+            }
+        })
     }
 
     private fun uploadTrack(body: RequestBody, callback: (result: Boolean) -> Unit) {
@@ -96,7 +93,7 @@ internal class SyncService : Service() {
             callback.invoke(false)
             return
         }
-        LogUtils.d("上传的数据--》$body")
+        LogUtils.d("上传数据==>>$body")
         Api.service.upload(request = body)
                 .enqueue(object : Callback<String?> {
                     override fun onFailure(call: Call<String?>?, t: Throwable?) {
