@@ -2,7 +2,7 @@ package  com.plugin.monitor.lifecycle.impl
 
 import android.app.Activity
 import android.content.Context
-import com.plugin.inject.Ignore
+import com.plugin.monitor.annotation.Ignore
 import com.plugin.monitor.lifecycle.ViewLifecycle
 
 /**

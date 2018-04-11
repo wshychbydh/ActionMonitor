@@ -1,7 +1,7 @@
 package com.plugin.monitor.lifecycle.impl
 
 import android.app.Activity
-import com.plugin.inject.Ignore
+import com.plugin.monitor.annotation.Ignore
 import com.plugin.monitor.lifecycle.FragmentLifecycle
 
 /**

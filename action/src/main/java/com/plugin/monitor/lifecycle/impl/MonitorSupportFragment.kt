@@ -2,7 +2,7 @@ package com.plugin.monitor.lifecycle.impl
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import com.plugin.inject.Ignore
+import com.plugin.monitor.annotation.Ignore
 import com.plugin.monitor.db.helper.TrackHelper
 
 /**

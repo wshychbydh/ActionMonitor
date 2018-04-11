@@ -1,6 +1,5 @@
 # ActionMonitor
 ### 用户行为数据采集（按行为轨迹采集）
-该版本只有按用户行为轨迹采集数据，用户点击等行为放在另外一个依赖中。
 
 ### 用户行为规则
 1、A -> B -> A<br>
@@ -48,11 +47,11 @@ Step 2. Add the dependency
 >如果父类是android.support.v4.Fragment，则继承<B>MonitorSupportFragment</B>
 
 >在需要的时候重写该方法，用于标识当前fragment是否需要作为轨迹，默认由Activity是否作为轨迹来判断
-
+ 
+      //通常情况下，无需重写该方法
 	  @Override
       public boolean isNeedMonitor() {
-            //通常情况下，可以不重写该方法
-            return super.isNeedMonitor();
+          return super.isNeedMonitor();
       }
 
 
@@ -65,7 +64,7 @@ Step 2. Add the dependency
         
         public xxView(Context context) {
            super(context);
-           //默认由Activity是否作为轨迹来判断，通常情况下，可以不重写该方法
+           //默认由Activity是否作为轨迹来判断，无需调用该方法
            mImpl.setNeedMonitor(true); 
         }
         
