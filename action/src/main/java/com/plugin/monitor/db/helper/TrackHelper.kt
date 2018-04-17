@@ -6,6 +6,7 @@ import com.plugin.monitor.SyncService
 import com.plugin.monitor.db.model.PageAction
 import com.plugin.monitor.db.model.Track
 import com.plugin.monitor.util.LogUtils
+import com.plugin.monitor.util.ThreadUtils
 import com.plugin.monitor.util.Utils
 import com.plugin.monitor.util.ViewUtils
 
@@ -24,6 +25,12 @@ internal class TrackHelper {
     }
 
     internal fun startTrack(activity: Activity) {
+        ThreadUtils.executeOnTrack {
+            startTrackAsync(activity)
+        }
+    }
+
+    private fun startTrackAsync(activity: Activity) {
         val pageId = ViewUtils.getActivityPath(activity)
         //重新打开了第一个界面，视为轨迹结束，重新开始一个新的轨迹
         if (track?.isFinishedTrack(pageId) == true) {
@@ -49,6 +56,12 @@ internal class TrackHelper {
     }
 
     internal fun startFragmentLifecycle(activity: Activity, fragmentName: String) {
+        ThreadUtils.executeOnTrack {
+            startFragmentLifecycleAsync(activity, fragmentName)
+        }
+    }
+
+    private fun startFragmentLifecycleAsync(activity: Activity, fragmentName: String) {
         if (fragmentAction == null) {
             fragmentAction = DataFactory.createPageAction(activity, fragmentName, track!!.getPrePage())
             track!!.actions.add(fragmentAction!!)
@@ -57,6 +70,12 @@ internal class TrackHelper {
     }
 
     internal fun startPageAction(viewId: String) {
+        ThreadUtils.executeOnTrack {
+            startPageActionAsync(viewId)
+        }
+    }
+
+    private fun startPageActionAsync(viewId: String) {
         if (viewAction == null) {
             viewAction = mutableMapOf()
         }
@@ -71,6 +90,12 @@ internal class TrackHelper {
      * may useless
      */
     internal fun endPageAction(viewId: String) {
+        ThreadUtils.executeOnTrack {
+            endPageActionAsync(viewId)
+        }
+    }
+
+    private fun endPageActionAsync(viewId: String) {
         if (viewAction?.contains(viewId) == true) {
             val action = viewAction!![viewId]
             action!!.pageEndTime = System.currentTimeMillis()
@@ -83,6 +108,12 @@ internal class TrackHelper {
      * call in fragment
      */
     internal fun tryEndTrack(activity: Activity) {
+        ThreadUtils.executeOnTrack {
+            tryEndTrackAsync(activity)
+        }
+    }
+
+    private fun tryEndTrackAsync(activity: Activity) {
         pageAction!!.pageEndTime = System.currentTimeMillis()
         pageAction!!.duration = System.currentTimeMillis() - pageAction!!.pageStartTime
         if (Utils.isHome(activity)) {
@@ -94,6 +125,12 @@ internal class TrackHelper {
      * call in fragment
      */
     internal fun endFragmentLifecycle() {
+        ThreadUtils.executeOnTrack {
+            endFragmentLifecycleAsync()
+        }
+    }
+
+    private fun endFragmentLifecycleAsync() {
         fragmentAction!!.pageEndTime = System.currentTimeMillis()
         fragmentAction!!.duration = System.currentTimeMillis() - fragmentAction!!.pageStartTime
     }

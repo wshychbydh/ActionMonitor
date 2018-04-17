@@ -35,7 +35,7 @@ internal class SyncService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        ThreadUtils.execute {
+        ThreadUtils.executeOnService {
             when (intent?.getIntExtra(TYPE, TYPE_SYNC)) {
                 TYPE_PAGE -> {
                     LogUtils.d("保存轨迹===>>")
@@ -97,6 +97,7 @@ internal class SyncService : Service() {
         Api.service.upload(request = body)
                 .enqueue(object : Callback<String?> {
                     override fun onFailure(call: Call<String?>?, t: Throwable?) {
+                        LogUtils.e("上传数据失败-->>${t?.message}")
                         callback.invoke(false)
                     }
 
@@ -119,7 +120,7 @@ internal class SyncService : Service() {
                 Api.service.upload(request = it)
                         .enqueue(object : Callback<String?> {
                             override fun onFailure(call: Call<String?>?, t: Throwable?) {
-                                LogUtils.d("同步失败==$it==>>${t?.message} , $syncAble")
+                                LogUtils.e("同步失败==$it==>>${t?.message} , $syncAble")
                                 syncAble = false
                             }
 
@@ -127,7 +128,7 @@ internal class SyncService : Service() {
                                 syncAble = response?.isSuccessful ?: false
                                 if (syncAble) {
                                     val index = DataHelper.deleteBody(it)
-                                    LogUtils.d("同步数据成功，该数据将从数据删除==$it==>>$index")
+                                    LogUtils.d("同步数据成功，该数据将从数据删除==$it==>>index:$index")
                                 }
                             }
                         })

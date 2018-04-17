@@ -18,10 +18,9 @@ object Monitor {
 
     @JvmStatic
     fun onClick(v: View) {
-        LogUtils.d("monitor", "ViewPath--onClick->" + ViewUtils.getViewPath(v))
-        LogUtils.d("monitor", "ViewInfo--onClick->" + ViewUtils.getViewInfo(v))
-
-        ThreadUtils.execute {
+        ThreadUtils.executeOnTrack {
+            LogUtils.d("monitor", "ViewPath--onClick->" + ViewUtils.getViewPath(v))
+            LogUtils.d("monitor", "ViewInfo--onClick->" + ViewUtils.getViewInfo(v))
             val action = DataFactory.createEventAction(v, EventAction.EVENT_CLICK)
             val intent = Intent(v.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -36,7 +35,7 @@ object Monitor {
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
             LogUtils.d("monitor", "ViewPath--onTouch->" + ViewUtils.getViewPath(v))
             LogUtils.d("monitor", "ViewInfo--onTouch->" + ViewUtils.getViewInfo(v))
-            ThreadUtils.execute {
+            ThreadUtils.executeOnTrack {
                 val action = DataFactory.createEventAction(v, EventAction.EVENT_TOUCH)
                 val intent = Intent(v.context, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -52,7 +51,7 @@ object Monitor {
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
             LogUtils.d("monitor", "ViewPath--onTouchEvent->" + ViewUtils.getViewPath(v))
             LogUtils.d("monitor", "ViewInfo--onTouchEvent->" + ViewUtils.getViewInfo(v))
-            ThreadUtils.execute {
+            ThreadUtils.executeOnTrack {
                 val action = DataFactory.createEventAction(v, EventAction.EVENT_TOUCH_EVENT)
                 val intent = Intent(v.context, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -67,7 +66,7 @@ object Monitor {
         //FIXME May modify in future
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
             LogUtils.d("monitor", "ViewPath--onTouchEvent->" + ViewUtils.getActivityPath(activity))
-            ThreadUtils.execute {
+            ThreadUtils.executeOnTrack {
                 val action = DataFactory.createEventAction(activity, EventAction.EVENT_TOUCH_EVENT)
                 val intent = Intent(activity, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -79,9 +78,9 @@ object Monitor {
 
     @JvmStatic
     fun onLongClick(v: View) {
-        LogUtils.d("monitor", "ViewPath--onLongClick->" + ViewUtils.getViewPath(v))
-        LogUtils.d("monitor", "ViewInfo--onLongClick->" + ViewUtils.getViewInfo(v))
-        ThreadUtils.execute {
+        ThreadUtils.executeOnTrack {
+            LogUtils.d("monitor", "ViewPath--onLongClick->" + ViewUtils.getViewPath(v))
+            LogUtils.d("monitor", "ViewInfo--onLongClick->" + ViewUtils.getViewInfo(v))
             val action = DataFactory.createEventAction(v, EventAction.EVENT_LONG_CLICK)
             val intent = Intent(v.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -95,16 +94,16 @@ object Monitor {
      */
     @JvmStatic
     fun onCheckedChanged(group: RadioGroup, checkedId: Int) {
-        var checkedView: View? = null
-        for (index in 0..group.childCount) {
-            if (group.getChildAt(index).id == checkedId) {
-                checkedView = group.getChildAt(index)
-                break
+        ThreadUtils.executeOnTrack {
+            var checkedView: View? = null
+            for (index in 0..group.childCount) {
+                if (group.getChildAt(index).id == checkedId) {
+                    checkedView = group.getChildAt(index)
+                    break
+                }
             }
-        }
-        LogUtils.d("monitor", "ViewPath--onCheckChanged->" + ViewUtils.getViewPath(checkedView!!))
-        LogUtils.d("monitor", "ViewInfo--onCheckChanged->" + ViewUtils.getViewInfo(checkedView))
-        ThreadUtils.execute {
+            LogUtils.d("monitor", "ViewPath--onCheckChanged->" + ViewUtils.getViewPath(checkedView!!))
+            LogUtils.d("monitor", "ViewInfo--onCheckChanged->" + ViewUtils.getViewInfo(checkedView))
             val action = DataFactory.createEventAction(checkedView, EventAction.EVENT_RADIOGROUP)
             val intent = Intent(checkedView.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
@@ -122,7 +121,7 @@ object Monitor {
         if (!isChecked) return
         LogUtils.d("monitor", "ViewPath--onCheckChanged->" + ViewUtils.getViewPath(buttonView))
         LogUtils.d("monitor", "ViewInfo--onCheckChanged->" + ViewUtils.getViewInfo(buttonView))
-        ThreadUtils.execute {
+        ThreadUtils.executeOnTrack {
             val action = DataFactory.createEventAction(buttonView, EventAction.EVENT_COMPOUNDBUTTON)
             val intent = Intent(buttonView.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
