@@ -86,6 +86,18 @@ Step 2. Add the dependency
             mImpl.onVisibilityChanged(visibility);
         }
     }
+    
+##### 混淆：
+如果你使用了混淆，在app下的proguard-rules文件中添加如下配置:
+    
+    # monitor
+    -keep class com.plugin.**{*;}
+    
+    # retrofit
+    -dontnote retrofit2.Platform
+    -dontwarn retrofit2.Platform$Java8
+    -keepattributes Signature
+    -keepattributes Exceptions
 
 
 #### 绑定信息
