@@ -113,6 +113,10 @@ Step 2. Add the dependency
 
      MonitorSdk.savePhone(phone)
 
+>在用户登出的时候调用
+
+     MonitorSdk.savePhone(null)
+
 
 #### SDK中的权限如下：（有则获取，不会主动请求）
 
