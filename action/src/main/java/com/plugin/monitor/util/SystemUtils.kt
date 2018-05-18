@@ -22,31 +22,41 @@ object SystemUtils {
      * 获取外网的IP
      */
     fun getNetworkInfo(context: Context): String {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             LogUtils.e("请授权应用(${context.packageName})网络权限")
             return ""
         }
-        val infoUrl = URL("http://pv.sohu.com/cityjson?ie=utf-8")
-        val connection = infoUrl.openConnection()
-        val httpConnection = connection as HttpURLConnection
-        val responseCode = httpConnection.responseCode
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            val stream = httpConnection.inputStream
-            stream.use { it ->
-                val reader = BufferedReader(InputStreamReader(it, "utf-8"))
-                val sb = StringBuilder()
-                var line: String?
-                do {
-                    line = reader.readLine()
-                    if (line != null) {
-                        sb.append(line + "\n")
+        try {
+            val infoUrl = URL("http://pv.sohu.com/cityjson?ie=utf-8")
+            val connection = infoUrl.openConnection()
+            connection.connectTimeout = 20 * 1000
+            connection.readTimeout = 20 * 1000
+            val httpConnection = connection as HttpURLConnection
+            val responseCode = httpConnection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val stream = httpConnection.inputStream
+                stream.use { it ->
+                    val reader = BufferedReader(InputStreamReader(it, "utf-8"))
+                    val sb = StringBuilder()
+                    var line: String?
+                    do {
+                        line = reader.readLine()
+                        if (line != null) {
+                            sb.append(line + "\n")
+                        }
+                    } while (line != null)
+                    val start = sb.indexOf("{")
+                    val end = sb.indexOf("}")
+                    return if (start in 1..(end - 1) && sb.length > end + 1) {
+                        sb.substring(start, end + 1)
+                    } else {
+                        ""
                     }
-                } while (line != null)
-                val start = sb.indexOf("{")
-                val end = sb.indexOf("}")
-                return sb.substring(start, end + 1)
+                }
             }
+        } catch (e: Exception) {
+            LogUtils.e(e)
+            return ""
         }
         return ""
     }
@@ -148,20 +158,16 @@ object SystemUtils {
             return ""
         }
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
-        val IMSI = telephonyManager?.subscriberId
-        LogUtils.d("运营商代码" + IMSI!!)
-        if (!IMSI.isNullOrEmpty()) {
-            return if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
-                "中国移动"
-            } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
-                "中国联通"
-            } else if (IMSI.startsWith("46003")) {
-                "中国电信"
-            } else {
-                ""
-            }
+        val imsi = telephonyManager?.subscriberId ?: return ""
+        return if (imsi.startsWith("46000") || imsi.startsWith("46002") || imsi.startsWith("46007")) {
+            "中国移动"
+        } else if (imsi.startsWith("46001") || imsi.startsWith("46006")) {
+            "中国联通"
+        } else if (imsi.startsWith("46003")) {
+            "中国电信"
+        } else {
+            ""
         }
-        return ""
     }
 
     fun isWifiConnect(context: Context): Boolean {

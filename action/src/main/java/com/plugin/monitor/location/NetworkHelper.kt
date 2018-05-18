@@ -27,7 +27,12 @@ internal object NetworkHelper {
         val preferences = MonitorSdk.context!!.getSharedPreferences("NET_INFO", Context.MODE_PRIVATE)
         val json = preferences.getString("netInfo", null)
         if (json != null) {
-            return Utils.getGson().fromJson(json, NetInfo::class.java)
+            return try {
+                Utils.getGson().fromJson(json, NetInfo::class.java)
+            } catch (e: Exception) {
+                LogUtils.e(e)
+                null
+            }
         }
         return null
     }
