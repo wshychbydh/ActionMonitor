@@ -12,8 +12,26 @@ import okhttp3.Response
 internal class NetInterceptor(var context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
-                .addHeader("data_head", Utils.getGson().toJson(DataFactory.createHeader(context)))
+                .addHeader("data_head", encodeHeadInfo(Utils.getGson().toJson(DataFactory.createHeader(context))))
                 .build()
         return chain.proceed(request)
+    }
+
+    //replace special char(include "\n" and chinese)
+    private fun encodeHeadInfo(headInfo: String): String {
+        val newValue = headInfo.replace("\n", "")
+        val stringBuffer = StringBuffer()
+        var i = 0
+        val length = newValue.length
+        while (i < length) {
+            val c = newValue[i]
+            if (c <= '\u001f' || c >= '\u007f') {
+                stringBuffer.append(String.format("\\u%04x", c.toInt()))
+            } else {
+                stringBuffer.append(c)
+            }
+            i++
+        }
+        return stringBuffer.toString()
     }
 }
