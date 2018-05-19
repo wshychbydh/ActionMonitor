@@ -97,10 +97,11 @@ internal class TrackHelper {
 
     private fun endPageActionAsync(viewId: String) {
         if (viewAction?.contains(viewId) == true) {
-            val action = viewAction!![viewId]
-            action!!.pageEndTime = System.currentTimeMillis()
-            action.duration = System.currentTimeMillis() - action.pageStartTime
-            viewAction!!.remove(viewId)
+            viewAction!![viewId]?.apply {
+                pageEndTime = System.currentTimeMillis()
+                duration = pageEndTime - pageStartTime
+                viewAction!!.remove(viewId)
+            }
         }
     }
 
@@ -114,8 +115,10 @@ internal class TrackHelper {
     }
 
     private fun tryEndTrackAsync(activity: Activity) {
-        pageAction!!.pageEndTime = System.currentTimeMillis()
-        pageAction!!.duration = System.currentTimeMillis() - pageAction!!.pageStartTime
+        pageAction?.apply {
+            pageEndTime = System.currentTimeMillis()
+            duration = pageEndTime - pageStartTime
+        }
         if (Utils.isHome(activity)) {
             endTrack(activity)
         }
@@ -131,8 +134,10 @@ internal class TrackHelper {
     }
 
     private fun endFragmentLifecycleAsync() {
-        fragmentAction!!.pageEndTime = System.currentTimeMillis()
-        fragmentAction!!.duration = System.currentTimeMillis() - fragmentAction!!.pageStartTime
+        fragmentAction?.apply {
+            pageEndTime = System.currentTimeMillis()
+            duration = pageEndTime - pageStartTime
+        }
     }
 
     /**
@@ -142,7 +147,7 @@ internal class TrackHelper {
         viewAction?.forEach {
             if (it.value.pageEndTime < 1) {
                 it.value.pageEndTime = System.currentTimeMillis()
-                it.value.duration = System.currentTimeMillis() - it.value.pageStartTime
+                it.value.duration = it.value.pageEndTime - it.value.pageStartTime
             }
         }
     }
