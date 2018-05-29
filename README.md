@@ -99,6 +99,10 @@ Step 2. Add the dependency
     -keepattributes Signature
     -keepattributes Exceptions
 
+    # okhttp
+    -dontwarn com.squareup.okhttp3.**
+    -keep class com.squareup.okhttp3.** { *;}
+    -dontwarn okio.**
 
 #### 绑定信息
 >在AndroidManifest.xml中的application标签下添加(按需添加)
