@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import com.plugin.monitor.db.helper.DataHelper
 import com.plugin.monitor.db.helper.SqliteHelper
 import com.plugin.monitor.lifecycle.impl.ActivityLifecycleImpl
@@ -38,7 +39,7 @@ object MonitorSdk {
         LogUtils.setDebugAble(debugAble)
         SqliteHelper.get()
         application.registerActivityLifecycleCallbacks(ActivityLifecycleImpl())
-        application.startService(Intent(context!!, SyncService::class.java))
+        ContextCompat.startForegroundService(context, Intent(context, SyncService::class.java))
         LocationHelper.startLocation(context!!)
         NetworkHelper.requestNetworkInfo(context!!)
     }

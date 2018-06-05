@@ -2,6 +2,7 @@ package com.plugin.monitor.util
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.view.MotionEvent
 import android.view.View
 import android.widget.CompoundButton
@@ -25,7 +26,7 @@ object Monitor {
             val intent = Intent(v.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
             intent.putExtra(SyncService.EVENT, action)
-            v.context.startService(intent)
+            ContextCompat.startForegroundService(v.context, intent)
         }
     }
 
@@ -40,7 +41,7 @@ object Monitor {
                 val intent = Intent(v.context, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
                 intent.putExtra(SyncService.EVENT, action)
-                v.context.startService(intent)
+                ContextCompat.startForegroundService(v.context, intent)
             }
         }
     }
@@ -56,7 +57,7 @@ object Monitor {
                 val intent = Intent(v.context, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
                 intent.putExtra(SyncService.EVENT, action)
-                v.context.startService(intent)
+                ContextCompat.startForegroundService(v.context, intent)
             }
         }
     }
@@ -71,7 +72,7 @@ object Monitor {
                 val intent = Intent(activity, SyncService::class.java)
                 intent.putExtra(SyncService.TYPE, SyncService.EVENT)
                 intent.putExtra(SyncService.EVENT, action)
-                activity.startService(intent)
+                ContextCompat.startForegroundService(activity, intent)
             }
         }
     }
@@ -85,7 +86,7 @@ object Monitor {
             val intent = Intent(v.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
             intent.putExtra(SyncService.EVENT, action)
-            v.context.startService(intent)
+            ContextCompat.startForegroundService(v.context, intent)
         }
     }
 
@@ -108,7 +109,7 @@ object Monitor {
             val intent = Intent(checkedView.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
             intent.putExtra(SyncService.EVENT, action)
-            checkedView.context.startService(intent)
+            ContextCompat.startForegroundService(checkedView.context, intent)
         }
     }
 
@@ -126,7 +127,7 @@ object Monitor {
             val intent = Intent(buttonView.context, SyncService::class.java)
             intent.putExtra(SyncService.TYPE, SyncService.EVENT)
             intent.putExtra(SyncService.EVENT, action)
-            buttonView.context.startService(intent)
+            ContextCompat.startForegroundService(buttonView.context, intent)
         }
     }
 }

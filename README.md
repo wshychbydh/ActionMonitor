@@ -122,7 +122,7 @@ Step 2. Add the dependency
      MonitorSdk.savePhone(null)
 
 
-#### SDK中的权限如下：（有则获取，不会主动请求）
+#### SDK中的权限（已在sdk中添加）如下：（有则获取，不会主动请求）
 
        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
        <uses-permission android:name="android.permission.GET_TASKS" />
@@ -131,6 +131,9 @@ Step 2. Add the dependency
        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
        <!-- 仅网络定位的权限 -->
        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+       <!-- PS:（无需添加）但有的手机可能需要FINE权限,授权软件才能识别到应用需要定位权限 -->
+       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 #### Demo地址：https://github.com/wshychbydh/ActionDemo
 

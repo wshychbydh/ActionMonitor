@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import com.plugin.monitor.util.LogUtils
+import com.plugin.monitor.util.LooperThread
 
 
 /**
@@ -58,7 +59,10 @@ internal object LocationHelper {
         //获取最后的network定位信息
         val location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         if (location == null) {
-            startLocation(context)
+            // must be run on handler thread
+            LooperThread("location", {
+                startLocation(context)
+            }).start()
         }
         return location
     }

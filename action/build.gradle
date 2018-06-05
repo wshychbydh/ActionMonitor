@@ -4,15 +4,15 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.wshychbydh'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:25.0.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.2.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

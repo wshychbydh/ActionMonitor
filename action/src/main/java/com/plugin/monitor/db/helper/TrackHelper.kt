@@ -2,6 +2,7 @@ package  com.plugin.monitor.db.helper
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import com.plugin.monitor.SyncService
 import com.plugin.monitor.db.model.PageAction
 import com.plugin.monitor.db.model.Track
@@ -158,7 +159,7 @@ internal class TrackHelper {
         val intent = Intent(activity, SyncService::class.java)
         intent.putExtra(SyncService.TYPE, SyncService.TYPE_PAGE)
         intent.putParcelableArrayListExtra(SyncService.ACTION, track!!.actions)
-        activity.startService(intent)
+        ContextCompat.startForegroundService(activity,intent)
         pageAction = null
         fragmentAction = null
         viewAction = null
