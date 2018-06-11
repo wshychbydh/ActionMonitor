@@ -1,8 +1,13 @@
 package com.plugin.monitor
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
+import android.support.v4.app.NotificationCompat
 import com.plugin.monitor.db.helper.DataFactory
 import com.plugin.monitor.db.helper.DataHelper
 import com.plugin.monitor.db.model.EventAction
@@ -28,6 +33,18 @@ internal class SyncService : Service() {
         const val TYPE = "start_type"
         const val ACTION = "action"
         const val EVENT = "event"
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        if (Build.VERSION.SDK_INT >= 26) {
+            val channelId = "sync"
+            val channel = NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
+            val notification = NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(android.R.drawable.stat_notify_sync).build()
+            startForeground(1, notification)
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
