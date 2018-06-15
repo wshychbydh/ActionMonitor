@@ -17,6 +17,7 @@ open class MonitorSupportFragment : Fragment() {
      */
     open var isNeedMonitor: Boolean = true
         get() {
+            if (activity == null) return false
             return field && activity.javaClass.getAnnotation(Ignore::class.java) == null
         }
 

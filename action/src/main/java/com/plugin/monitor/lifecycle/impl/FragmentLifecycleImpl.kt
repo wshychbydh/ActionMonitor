@@ -7,12 +7,12 @@ import com.plugin.monitor.lifecycle.FragmentLifecycle
 /**
  * Created by cool on 2018/3/22.
  */
-class FragmentLifecycleImpl(override val activity: Activity) : FragmentLifecycle {
+class FragmentLifecycleImpl(override var activity: Activity?) : FragmentLifecycle {
 
     /**
      * If you want to monitor even though activity is ignored, set it manual.
      */
-    override var isNeedMonitor: Boolean = activity.javaClass.getAnnotation(Ignore::class.java) == null
+    override var isNeedMonitor: Boolean = activity != null && activity!!.javaClass.getAnnotation(Ignore::class.java) == null
 
     private var isHidden: Boolean = false
     private var isVisibleToUser: Boolean = true

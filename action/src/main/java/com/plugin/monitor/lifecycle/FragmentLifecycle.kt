@@ -11,18 +11,18 @@ internal interface FragmentLifecycle {
      * If the fragment is not monitored, return false.
      */
     var isNeedMonitor: Boolean
-    val activity: Activity
+    val activity: Activity?
 
     /**
      * isVisibleToUser: Fragment is visible to user
      */
     fun setUserVisibleHint(isVisibleToUser: Boolean) {
         //只有resumed状态的fragment适用此情景
-        if (isNeedMonitor) {
+        if (isNeedMonitor && activity != null) {
             // isVisibleToUser == true : FragmentShow
             //  isVisibleToUser == false : FragmentHide
             if (isVisibleToUser) {
-                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity!!, this.javaClass.simpleName)
             } else {
                 TrackHelper.get().endFragmentLifecycle()
             }
@@ -30,11 +30,11 @@ internal interface FragmentLifecycle {
     }
 
     fun onHiddenChanged(hidden: Boolean) {
-        if (isNeedMonitor) {
+        if (isNeedMonitor && activity != null) {
             //  hidden == true : FragmentShow
             //  hidden == false : FragmentHide
             if (hidden) {
-                TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+                TrackHelper.get().startFragmentLifecycle(activity!!, this.javaClass.simpleName)
             } else {
                 TrackHelper.get().endFragmentLifecycle()
             }
@@ -42,19 +42,19 @@ internal interface FragmentLifecycle {
     }
 
     fun onCreate() {
-        if (isNeedMonitor) {
-            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+        if (isNeedMonitor && activity != null) {
+            TrackHelper.get().startFragmentLifecycle(activity!!, this.javaClass.simpleName)
         }
     }
 
     fun onResume() {
-        if (isNeedMonitor) {
-            TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
+        if (isNeedMonitor && activity != null) {
+            TrackHelper.get().startFragmentLifecycle(activity!!, this.javaClass.simpleName)
         }
     }
 
     fun onPause() {
-        if (isNeedMonitor) {
+        if (isNeedMonitor && activity != null) {
             TrackHelper.get().endFragmentLifecycle()
         }
     }
