@@ -2,11 +2,12 @@ package com.plugin.monitor
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
+import android.app.job.JobParameters
+import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.IBinder
+import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import com.plugin.monitor.db.helper.DataFactory
 import com.plugin.monitor.db.helper.DataHelper
@@ -24,7 +25,8 @@ import retrofit2.Response
 /**
  * Created by cool on 2018/3/19.
  */
-internal class SyncService : Service() {
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+internal class JobService : JobService() {
 
     companion object {
         const val TYPE_PAGE = 0
@@ -47,8 +49,12 @@ internal class SyncService : Service() {
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun onStartJob(params: JobParameters?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStopJob(params: JobParameters?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -79,7 +85,7 @@ internal class SyncService : Service() {
 
     private fun savePageAction(actions: List<PageAction>) {
         val body = DataFactory.composePageActionBody(this, actions)
-        uploadTrack(body) {
+        uploadTrack(body, {
             if (it) {
                 LogUtils.d("上传行为轨迹数据成功，尝试同步数据===>>")
                 //尝试上传本地缓存的数据
@@ -88,12 +94,12 @@ internal class SyncService : Service() {
                 LogUtils.d("上传行为轨迹数据失败，将数据保存至本地===>>")
                 saveActionToDb(body)
             }
-        }
+        })
     }
 
     private fun saveEventAction(action: EventAction) {
         val body = DataFactory.composeEventActionBody(this, action)
-        uploadTrack(body) {
+        uploadTrack(body, {
             if (it) {
                 LogUtils.d("上传用户事件数据成功，尝试同步数据===>>")
                 //尝试上传本地缓存的数据
@@ -102,7 +108,7 @@ internal class SyncService : Service() {
                 LogUtils.d("上传用户事件数据失败，将数据保存至本地===>>")
                 saveActionToDb(body)
             }
-        }
+        })
     }
 
     private fun uploadTrack(body: RequestBody, callback: (result: Boolean) -> Unit) {

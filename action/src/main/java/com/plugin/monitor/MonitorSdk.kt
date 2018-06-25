@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
 import com.plugin.monitor.db.helper.DataHelper
 import com.plugin.monitor.db.helper.SqliteHelper
 import com.plugin.monitor.lifecycle.impl.ActivityLifecycleImpl
 import com.plugin.monitor.location.LocationHelper
 import com.plugin.monitor.location.NetworkHelper
 import com.plugin.monitor.util.LogUtils
+import com.plugin.monitor.util.ServiceUtil
 
 @SuppressLint("StaticFieldLeak")
 /**
@@ -39,7 +39,7 @@ object MonitorSdk {
         LogUtils.setDebugAble(debugAble)
         SqliteHelper.get()
         application.registerActivityLifecycleCallbacks(ActivityLifecycleImpl())
-        ContextCompat.startForegroundService(context, Intent(context, SyncService::class.java))
+        ServiceUtil.startSyncService(context!!, Intent(context, SyncService::class.java))
         LocationHelper.startLocation(context!!)
         NetworkHelper.requestNetworkInfo(context!!)
     }
@@ -53,5 +53,16 @@ object MonitorSdk {
             throw IllegalStateException("You should call MonitorSdk.init() first !")
         }
         DataHelper.savePhone(context!!, phone)
+    }
+
+    /**
+     * 多渠道打包时若不能再manifest中配置渠道，可主动调用该代码设置
+     */
+    @JvmStatic
+    fun saveChannel(channel: String) {
+        if (context == null) {
+            throw IllegalStateException("You should call MonitorSdk.init() first !")
+        }
+        DataHelper.saveChannel(context!!, channel)
     }
 }

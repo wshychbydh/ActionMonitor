@@ -3,6 +3,7 @@ package com.plugin.monitor.util
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import com.plugin.monitor.db.helper.DataHelper
 import com.plugin.monitor.db.model.AppInfo
 import com.plugin.monitor.db.model.DeviceInfo
 import com.plugin.monitor.db.model.NetworkInfo
@@ -24,7 +25,8 @@ internal object InfoUtils {
             appInfo.sdkVersionName = packageInfo.versionName
             appInfo.sdkVersionCode = packageInfo.versionCode
             val channel = Utils.getAppMetaDataByKey(context, "channel")
-            appInfo.channel = channel ?: Utils.getAppMetaDataByKey(context, "UMENG_CHANNEL")
+                    ?: Utils.getAppMetaDataByKey(context, "UMENG_CHANNEL")
+            appInfo.channel = channel ?: DataHelper.getChannel(context)
             return appInfo
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()

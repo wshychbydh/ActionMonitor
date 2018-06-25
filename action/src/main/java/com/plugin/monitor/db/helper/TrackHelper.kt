@@ -1,15 +1,9 @@
 package  com.plugin.monitor.db.helper
 
 import android.app.Activity
-import android.content.Intent
-import android.support.v4.content.ContextCompat
-import com.plugin.monitor.SyncService
 import com.plugin.monitor.db.model.PageAction
 import com.plugin.monitor.db.model.Track
-import com.plugin.monitor.util.LogUtils
-import com.plugin.monitor.util.ThreadUtils
-import com.plugin.monitor.util.Utils
-import com.plugin.monitor.util.ViewUtils
+import com.plugin.monitor.util.*
 
 /**
  * Created by cool on 2018/3/7.
@@ -156,10 +150,7 @@ internal class TrackHelper {
     private fun endTrack(activity: Activity) {
         tryEndViewLifecycle()
         LogUtils.d(track.toString())
-        val intent = Intent(activity, SyncService::class.java)
-        intent.putExtra(SyncService.TYPE, SyncService.TYPE_PAGE)
-        intent.putParcelableArrayListExtra(SyncService.ACTION, track!!.actions)
-        ContextCompat.startForegroundService(activity,intent)
+        ServiceUtil.startServiceWithPage(activity, track!!.actions)
         pageAction = null
         fragmentAction = null
         viewAction = null

@@ -2,6 +2,7 @@ package com.plugin.monitor.db.helper
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import com.plugin.monitor.db.model.RequestBody
 import com.plugin.monitor.util.Utils
 
@@ -9,6 +10,15 @@ import com.plugin.monitor.util.Utils
  * Created by cool on 2018/3/22.
  */
 internal object DataHelper {
+
+    fun saveChannel(context: Context, channel: String) {
+        val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
+        shared.edit().putString("channel", channel).apply()
+    }
+
+    fun getChannel(context: Context): String {
+        return context.getSharedPreferences("INFO", Context.MODE_PRIVATE).getString("channel", "")
+    }
 
     fun savePhone(context: Context, userInfo: String) {
         val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
@@ -20,17 +30,22 @@ internal object DataHelper {
     }
 
     fun saveBody(body: RequestBody) {
-        val database = SqliteHelper.get().writableDatabase
-        val contentValue = ContentValues()
-        contentValue.put(SqliteHelper.BODY, Utils.getGson().toJson(body))
-        contentValue.put(SqliteHelper.ID, body.hashCode())
-        database.insert(SqliteHelper.TABLE_NAME, null, contentValue)
+        try {
+            val database = SqliteHelper.get().writableDatabase
+            val contentValue = ContentValues()
+            contentValue.put(SqliteHelper.BODY, Utils.getGson().toJson(body))
+            contentValue.put(SqliteHelper.ID, body.hashCode())
+            database.insert(SqliteHelper.TABLE_NAME, null, contentValue)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun getBody(): List<RequestBody>? {
-        val database = SqliteHelper.get().readableDatabase
-        val cursor = database.query(SqliteHelper.TABLE_NAME, null, null, null, null, null, null)
+        var cursor: Cursor? = null
         try {
+            val database = SqliteHelper.get().readableDatabase
+            cursor = database.query(SqliteHelper.TABLE_NAME, null, null, null, null, null, null)
             if (cursor?.count ?: 0 > 0) {
                 val gson = Utils.getGson()
                 val bodyList = ArrayList<RequestBody>()

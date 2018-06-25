@@ -102,9 +102,9 @@ internal object Utils {
      */
 
     fun isHome(context: Context): Boolean {
-        val mActivityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val rti = mActivityManager.getRunningTasks(1)
-        return getHomes(context).contains(rti[0].topActivity.packageName)
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+        val taskList = am?.getRunningTasks(1)
+        return taskList != null && taskList.isNotEmpty() && getHomes(context).contains(taskList[0].topActivity.packageName)
     }
 
     /**
@@ -119,9 +119,11 @@ internal object Utils {
         intent.addCategory(Intent.CATEGORY_HOME)
         val resolveInfo = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY)
-        for (ri in resolveInfo) {
-            //属于桌面的应用:com.android.launcher(启动器)
-            names.add(ri.activityInfo.packageName)
+        if (resolveInfo != null && resolveInfo.isNotEmpty()) {
+            for (ri in resolveInfo) {
+                //属于桌面的应用:com.android.launcher(启动器)
+                names.add(ri.activityInfo.packageName)
+            }
         }
         return names
     }
