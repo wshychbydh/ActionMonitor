@@ -18,7 +18,6 @@ import com.plugin.monitor.util.LooperThread
 internal object LocationHelper {
 
     fun startLocation(context: Context) {
-        val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //权限检查
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -27,7 +26,9 @@ internal object LocationHelper {
             LogUtils.e("请授权应用(${context.packageName})定位权限")
             return
         }
-        if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//是否支持Network定位
+
+        val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        if (manager != null && manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) { //是否支持Network定位
             manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
                     object : LocationListener {
                         override fun onLocationChanged(location: Location?) {
@@ -50,19 +51,21 @@ internal object LocationHelper {
     }
 
     fun getLocation(context: Context): Location? {
-        val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             LogUtils.e("请授权应用(${context.packageName})定位权限")
             return null
         }
+
+        val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         //获取最后的network定位信息
-        val location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        val location = manager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         if (location == null) {
             // must be run on handler thread
-            LooperThread("location", {
+            LooperThread("location") {
                 startLocation(context)
-            }).start()
+            }.start()
         }
         return location
     }

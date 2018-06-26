@@ -13,14 +13,14 @@ import com.plugin.monitor.util.Utils
 internal object NetworkHelper {
 
     fun requestNetworkInfo(context: Context) {
-        Thread({
+        Thread {
             if (SystemUtils.isWifiConnect(context)) {
                 val netInfo = SystemUtils.getNetworkInfo(context)
                 if (netInfo.isNotEmpty()) {
                     saveNetInfo(context, netInfo)
                 }
             }
-        }).start()
+        }.start()
     }
 
     fun getNetInfo(): NetInfo? {

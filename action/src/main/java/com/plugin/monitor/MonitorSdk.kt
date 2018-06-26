@@ -56,7 +56,7 @@ object MonitorSdk {
     }
 
     /**
-     * 多渠道打包时若不能再manifest中配置渠道，可主动调用该代码设置
+     * 多渠道打包时若不能在manifest中配置渠道，可主动调用该代码设置
      */
     @JvmStatic
     fun saveChannel(channel: String) {

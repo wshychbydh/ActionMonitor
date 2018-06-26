@@ -150,7 +150,7 @@ internal class TrackHelper {
     private fun endTrack(activity: Activity) {
         tryEndViewLifecycle()
         LogUtils.d(track.toString())
-        ServiceUtil.startServiceWithPage(activity, track!!.actions)
+        ServiceUtil.startServiceWithAction(activity, track!!.actions)
         pageAction = null
         fragmentAction = null
         viewAction = null

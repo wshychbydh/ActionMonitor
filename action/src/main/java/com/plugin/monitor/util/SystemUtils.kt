@@ -68,15 +68,14 @@ object SystemUtils {
     val ipAddressString: String
         get() {
             try {
-                val enNetI = NetworkInterface
-                        .getNetworkInterfaces()
+                val enNetI = NetworkInterface.getNetworkInterfaces() ?: return ""
                 while (enNetI.hasMoreElements()) {
                     val netI = enNetI.nextElement()
-                    val enumIpAddr = netI.inetAddresses
-                    while (enumIpAddr.hasMoreElements()) {
+                    val enumIpAddr = netI?.inetAddresses
+                    while (enumIpAddr?.hasMoreElements() == true) {
                         val address = enumIpAddr.nextElement()
-                        if (address is Inet4Address && !address.isLoopbackAddress()) {
-                            return address.getHostAddress()
+                        if (address != null && address is Inet4Address && !address.isLoopbackAddress()) {
+                            return address.getHostAddress() ?: ""
                         }
                     }
                 }
@@ -109,18 +108,21 @@ object SystemUtils {
     }
 
     fun getMacAddress(): String {
-        val all = Collections.list(NetworkInterface.getNetworkInterfaces())
-        for (nif in all) {
-            if (!nif.name.equals("wlan0", ignoreCase = true)) continue
-            val macBytes = nif.hardwareAddress ?: return ""
-            val res1 = StringBuilder()
-            for (b in macBytes) {
-                res1.append(String.format("%02X:", b))
+        val networks = NetworkInterface.getNetworkInterfaces()
+        if (networks != null && networks.hasMoreElements()) {
+            val all = Collections.list(networks)
+            for (nif in all) {
+                if (!nif.name.equals("wlan0", ignoreCase = true)) continue
+                val macBytes = nif.hardwareAddress ?: return ""
+                val res1 = StringBuilder()
+                for (b in macBytes) {
+                    res1.append(String.format("%02X:", b))
+                }
+                if (res1.isNotEmpty()) {
+                    res1.deleteCharAt(res1.length - 1)
+                }
+                return res1.toString()
             }
-            if (res1.isNotEmpty()) {
-                res1.deleteCharAt(res1.length - 1)
-            }
-            return res1.toString()
         }
         return "02:00:00:00:00:00"
     }
@@ -209,9 +211,7 @@ object SystemUtils {
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            if (p != null) {
-                p.destroy()
-            }
+            p?.destroy()
         }
         return false
     }

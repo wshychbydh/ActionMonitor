@@ -10,9 +10,9 @@ import java.util.*
 /**
  *Created by cool on 2018/6/25
  */
-object ServiceUtil {
+internal object ServiceUtil {
 
-    fun startServiceWithPage(context: Context, value: ArrayList<out Parcelable>) {
+    fun startServiceWithAction(context: Context, value: ArrayList<out Parcelable>) {
         val intent = Intent(context, SyncService::class.java)
         intent.putExtra(SyncService.TYPE, SyncService.TYPE_PAGE)
         intent.putParcelableArrayListExtra(SyncService.ACTION, value)

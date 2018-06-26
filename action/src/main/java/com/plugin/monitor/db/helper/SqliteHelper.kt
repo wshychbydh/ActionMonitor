@@ -35,6 +35,7 @@ internal class SqliteHelper(context: Context?, name: String?, factory: SQLiteDat
                 + "$ID integer,"
                 + "$BODY text)")
 
+        @Volatile
         private var instance: SQLiteOpenHelper? = null
 
         fun get(): SQLiteOpenHelper {
