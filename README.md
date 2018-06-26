@@ -110,7 +110,7 @@ Step 2. Add the dependency
 	 <meta-data android:name="domain"
                 android:value="应用标识（默认为包名）"/>
                 
-     <meta-data android:name="channel"
+     <meta-data android:name="channel或UMENG_CHANNEL"
                 android:value="应用渠道"/>
 
 >多渠道打包时若不能在manifest中配置渠道，可主动调用如下代码设置
