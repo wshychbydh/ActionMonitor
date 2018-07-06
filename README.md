@@ -117,6 +117,10 @@ Step 2. Add the dependency
 
      MonitorSdk.saveChannel(channel)
 
+>动态配置Key值来获取渠道（channelKey）
+
+     MonitorSdk.saveChannelKey(channelKey)
+
 >在用户登陆及判断登陆(已登录用户)状态的地方分别调用
 
      MonitorSdk.savePhone(phone)
