@@ -105,6 +105,10 @@ Step 2. Add the dependency
     -dontwarn okio.**
 
 #### 绑定信息
+>为了方便统计，需要读取每个Activity的标题，请为其设置。例如：
+
+    <activity android:label="xx标题"/> 或在Activity中调用setTitle("xx标题")
+
 >在AndroidManifest.xml中的application标签下添加(按需添加)
 
 	 <meta-data android:name="domain"
