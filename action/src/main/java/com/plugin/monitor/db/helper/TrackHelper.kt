@@ -58,7 +58,7 @@ internal class TrackHelper {
 
     private fun startFragmentLifecycleAsync(activity: Activity, fragmentName: String) {
         if (fragmentAction == null) {
-            fragmentAction = DataFactory.createPageAction(activity, fragmentName, track!!.getPrePage())
+            fragmentAction = DataFactory.createPageAction(activity, fragmentName, track!!.getPrePage()?.referPageId)
             track!!.actions.add(fragmentAction!!)
         }
         fragmentAction!!.pageStartTime = System.currentTimeMillis()
@@ -74,7 +74,7 @@ internal class TrackHelper {
         if (viewAction == null) {
             viewAction = mutableMapOf()
         }
-        val action = DataFactory.createPageViewAction(ViewUtils.decodeViewId(viewId), track!!.getPrePage())
+        val action = DataFactory.createPageViewAction(ViewUtils.decodeViewId(viewId), track!!.getPrePage()?.pageId)
         action.pageStartTime = System.currentTimeMillis()
         track!!.actions.add(action)
         viewAction!![viewId] = action

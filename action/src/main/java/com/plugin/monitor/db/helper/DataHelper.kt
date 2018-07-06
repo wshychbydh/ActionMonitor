@@ -11,6 +11,15 @@ import com.plugin.monitor.util.Utils
  */
 internal object DataHelper {
 
+    fun saveChannelKey(context: Context, channel: String) {
+        val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
+        shared.edit().putString("channelKey", channel).apply()
+    }
+
+    fun getChannelKey(context: Context): String {
+        return context.getSharedPreferences("INFO", Context.MODE_PRIVATE).getString("channelKey", "channel")
+    }
+
     fun saveChannel(context: Context, channel: String) {
         val shared = context.getSharedPreferences("INFO", Context.MODE_PRIVATE)
         shared.edit().putString("channel", channel).apply()

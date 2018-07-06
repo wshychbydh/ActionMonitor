@@ -3,7 +3,6 @@ package com.plugin.monitor.util
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import android.support.v4.content.ContextCompat
 import com.plugin.monitor.SyncService
 import java.util.*
 
@@ -28,7 +27,9 @@ internal object ServiceUtil {
 
     fun startSyncService(context: Context, intent: Intent) {
         try {
-            ContextCompat.startForegroundService(context, intent)
+            context.startService(intent)
+            //FIXME build up 26 need this
+           // ContextCompat.startForegroundService(context, intent)
         } catch (e: Exception) {
             //OPPO等手机处于省电模式时，息屏后会禁止“非允许”的程序后台运行
             LogUtils.e(e)

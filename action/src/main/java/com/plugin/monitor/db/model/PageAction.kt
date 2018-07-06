@@ -9,6 +9,8 @@ internal class PageAction() : Parcelable {
     var pageId: String? = null
     var referPageId: String? = null
     var duration: Long = 0L
+    var pageName: CharSequence? = null
+    var referPageName: CharSequence? = null
 
     constructor(parcel: Parcel) : this() {
         pageStartTime = parcel.readLong()
@@ -41,6 +43,7 @@ internal class PageAction() : Parcelable {
     }
 
     override fun toString(): String {
-        return "PageAction(${pageId?.substring(pageId!!.lastIndexOf(".") + 1, pageId!!.length)}, ${duration / 1000f}秒)"
+        return "PageAction(${pageId?.substring(pageId!!.lastIndexOf(".") + 1,
+                pageId!!.length)}($pageName), ${duration / 1000f}秒)"
     }
 }

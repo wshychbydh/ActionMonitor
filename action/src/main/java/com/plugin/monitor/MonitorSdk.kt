@@ -36,12 +36,15 @@ object MonitorSdk {
     @JvmStatic
     fun init(application: Application, debugAble: Boolean = false) {
         context = application.applicationContext
-        LogUtils.setDebugAble(debugAble)
-        SqliteHelper.get()
-        application.registerActivityLifecycleCallbacks(ActivityLifecycleImpl())
-        ServiceUtil.startSyncService(context!!, Intent(context, SyncService::class.java))
-        LocationHelper.startLocation(context!!)
-        NetworkHelper.requestNetworkInfo(context!!)
+        //Debug时不上传数据
+        if (!BuildConfig.DEBUG) {
+            LogUtils.setDebugAble(debugAble)
+            SqliteHelper.get()
+            application.registerActivityLifecycleCallbacks(ActivityLifecycleImpl())
+            ServiceUtil.startSyncService(context!!, Intent(context, SyncService::class.java))
+            LocationHelper.startLocation(context!!)
+            NetworkHelper.requestNetworkInfo(context!!)
+        }
     }
 
     /**
@@ -56,7 +59,7 @@ object MonitorSdk {
     }
 
     /**
-     * 多渠道打包时若不能在manifest中配置渠道，可主动调用该代码设置
+     * 多渠道打包时若不能在manifest中配置渠道，可主动调用该代码设置channel
      */
     @JvmStatic
     fun saveChannel(channel: String) {
@@ -64,5 +67,16 @@ object MonitorSdk {
             throw IllegalStateException("You should call MonitorSdk.init() first !")
         }
         DataHelper.saveChannel(context!!, channel)
+    }
+
+    /**
+     * 多渠道打包时若不能在manifest中配置渠道，可主动调用该代码设置channelKey
+     */
+    @JvmStatic
+    fun saveChannelKey(channelKey: String) {
+        if (context == null) {
+            throw IllegalStateException("You should call MonitorSdk.init() first !")
+        }
+        DataHelper.saveChannelKey(context!!, channelKey)
     }
 }

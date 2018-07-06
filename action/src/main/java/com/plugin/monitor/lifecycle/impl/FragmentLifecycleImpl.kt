@@ -1,6 +1,7 @@
 package com.plugin.monitor.lifecycle.impl
 
 import android.app.Activity
+import com.plugin.monitor.BuildConfig
 import com.plugin.monitor.annotation.Ignore
 import com.plugin.monitor.lifecycle.FragmentLifecycle
 
@@ -12,7 +13,8 @@ class FragmentLifecycleImpl(override var activity: Activity?) : FragmentLifecycl
     /**
      * If you want to monitor even though activity is ignored, set it manual.
      */
-    override var isNeedMonitor: Boolean = activity != null && activity!!.javaClass.getAnnotation(Ignore::class.java) == null
+    override var isNeedMonitor: Boolean = activity != null && !BuildConfig.DEBUG
+            && activity!!.javaClass.getAnnotation(Ignore::class.java) == null
 
     private var isHidden: Boolean = false
     private var isVisibleToUser: Boolean = true

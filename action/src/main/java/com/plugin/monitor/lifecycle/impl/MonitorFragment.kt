@@ -2,6 +2,7 @@ package  com.plugin.monitor.lifecycle.impl
 
 import android.app.Fragment
 import android.os.Bundle
+import com.plugin.monitor.BuildConfig
 import com.plugin.monitor.annotation.Ignore
 import com.plugin.monitor.db.helper.TrackHelper
 
@@ -17,7 +18,7 @@ open class MonitorFragment : Fragment() {
      */
     open var isNeedMonitor: Boolean = true
         get() {
-            if (activity == null) return false
+            if (activity == null || BuildConfig.DEBUG) return false
             return field && activity.javaClass.getAnnotation(Ignore::class.java) == null
         }
 

@@ -23,11 +23,11 @@ internal class Track() : Parcelable {
         return startPageId == pageId && actions.size > 1
     }
 
-    fun getPrePage(): String? {
+    fun getPrePage(): PageAction? {
         return if (actions.isEmpty()) {
-            ""
+            null
         } else {
-            actions.last().pageId
+            actions.last()
         }
     }
 
