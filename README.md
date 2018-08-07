@@ -111,6 +111,9 @@ Step 2. Add the dependency
 
 >在AndroidManifest.xml中的application标签下添加(按需添加)
 
+     <meta-data android:name="MONITOR_URL"
+                    android:value="接受数据的服务器地址（必填）"/>
+
 	 <meta-data android:name="domain"
                 android:value="应用标识（默认为包名）"/>
                 
