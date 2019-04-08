@@ -64,9 +64,10 @@ open class MonitorSupportFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isNeedMonitor && isFragmentShown) {
+        if (isNeedMonitor && isFragmentShown && !isFragmentCreate) {
             TrackHelper.get().startFragmentLifecycle(activity, this.javaClass.simpleName)
         }
+        isFragmentCreate = false
     }
 
     override fun onPause() {
